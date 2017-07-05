@@ -4,19 +4,21 @@ ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
 
 # Dependencies
-RUN apk update && apk upgrade && apk add \
+RUN apk update
+RUN apk del libressl2.5-libssl
+RUN apk upgrade && apk add \
     curl \
     freetype \
     gettext \
     jpeg \
     lcms2 \
-    libcrypto1.0 \
     libffi \
-    libssl1.0 \
+    libressl2.5-libtls \
     libwebp \
     libxml2 \
     libxslt \
     openjpeg \
+    postgresql-libs \
     postgresql-client \
     tiff \
     tini \
@@ -27,15 +29,20 @@ RUN apk update && apk upgrade && apk add \
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
         freetype-dev \
         gcc \
+        g++ \
+        gfortran \
         jpeg-dev \
+        lapack-dev \
         lcms2-dev \
         libffi-dev \
         libwebp-dev \
+        libressl-dev \
         libxml2-dev \
         libxslt-dev \
         musl-dev \
+        openblas-dev \
         openjpeg-dev \
-        openssl-dev \
+        postgresql-dev \
         readline-dev \
         tiff-dev \
         yaml-dev \
@@ -70,5 +77,5 @@ ENV WHEELS_PLATFORM=alpine36-py36 \
     PATH=/root/.local/bin:$PATH
 WORKDIR /usr/src/app
 EXPOSE 80/tcp 443/tcp
-ENTRYPOINT ["/sbin/tini", "-g", "--"]
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["start", "web"]

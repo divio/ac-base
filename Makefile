@@ -10,6 +10,9 @@ endif
 build:
 	docker build -t $(IMAGE_NAME) --build-arg TARGET=$(TARGET) -f Dockerfile .
 
+test:
+	docker run --rm -it $(IMAGE_NAME) pip install psycopg2 cryptography numpy scipy pillow lxml pyyaml
+
 all:
 	$(MAKE) target_build TARGET=prod
 	$(MAKE) target_build TARGET=dev
