@@ -40,7 +40,6 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         libxml2-dev \
         libxslt-dev \
         musl-dev \
-        openblas-dev \
         openjpeg-dev \
         postgresql-dev \
         readline-dev \
