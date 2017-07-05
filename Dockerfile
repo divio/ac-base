@@ -51,6 +51,7 @@ RUN ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv
 
 RUN pipsi install pip-reqs==0.5
 RUN pipsi install start==0.2
+RUN if [ "$TARGET" = "dev" ] ; then pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.1.tar.gz#egg=pip-tools==1.9.0.1' ; fi
 
 # Cleanup
 RUN rm -rf /root/.cache
