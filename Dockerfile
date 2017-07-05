@@ -4,7 +4,7 @@ ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
 
 # Dependencies
-RUN apk add -U \
+RUN apk update && apk upgrade && apk add \
     curl \
     freetype \
     gettext \
@@ -64,7 +64,7 @@ FROM scratch
 COPY --from=build / /
 
 # Execution environment setup
-ENV WHEELS_PLATFORM=alpine3.6 \
+ENV WHEELS_PLATFORM=alpine36-py36 \
     PROCFILE_PATH=/usr/src/app/Procfile \
     PATH=/root/.local/bin:$PATH
 WORKDIR /usr/src/app
