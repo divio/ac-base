@@ -39,6 +39,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         libressl-dev \
         libxml2-dev \
         libxslt-dev \
+        linux-headers \
         musl-dev \
         openjpeg-dev \
         postgresql-dev \
