@@ -77,6 +77,7 @@ COPY --from=build / /
 ENV WHEELS_PLATFORM=alpine36-py36 \
     PROCFILE_PATH=/app/Procfile \
     PATH=/root/.local/bin:$PATH \
+    NGINX_CONF_PATH=/dev/null
 WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/sbin/tini", "--"]
