@@ -63,6 +63,9 @@ RUN if [ "$TARGET" = "dev" ] ; then pipsi install 'https://github.com/aldryncore
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.py
 RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.pth
 
+# Node environment setup
+RUN curl -o - https://raw.githubusercontent.com/creationix/nvm/v0.33.1/install.sh | sh
+
 # Cleanup
 RUN rm -rf /root/.cache
 
@@ -77,6 +80,7 @@ COPY --from=build / /
 ENV WHEELS_PLATFORM=alpine36-py36 \
     PROCFILE_PATH=/app/Procfile \
     PATH=/root/.local/bin:$PATH \
+    NVM_DIR=/root/.nvm
 WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/sbin/tini", "--"]
