@@ -64,8 +64,7 @@ RUN if [ "$TARGET" = "dev" ] ; then pipsi install 'https://github.com/aldryncore
 RUN rm -rf /root/.cache
 
 # Application environment setup
-RUN mkdir -p /urs/src/app
-
+RUN mkdir -p /app
 
 
 FROM scratch
@@ -73,9 +72,9 @@ COPY --from=build / /
 
 # Execution environment setup
 ENV WHEELS_PLATFORM=alpine36-py36 \
-    PROCFILE_PATH=/usr/src/app/Procfile \
-    PATH=/root/.local/bin:$PATH
-WORKDIR /usr/src/app
+    PROCFILE_PATH=/app/Procfile \
+    PATH=/root/.local/bin:$PATH \
+WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["start", "web"]
