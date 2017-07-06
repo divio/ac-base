@@ -60,6 +60,9 @@ RUN pipsi install pip-reqs==0.5
 RUN pipsi install start==0.2
 RUN if [ "$TARGET" = "dev" ] ; then pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.1.tar.gz#egg=pip-tools==1.9.0.1' ; fi
 
+COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.py
+RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.pth
+
 # Cleanup
 RUN rm -rf /root/.cache
 
