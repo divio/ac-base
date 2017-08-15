@@ -3,9 +3,13 @@ FROM python:3.6.2-alpine3.6 AS build
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
 
+# Add edge packages
+RUN echo @edge http://nl.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories
+RUN echo @edge http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
+RUN echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories
+RUN apk update && apk upgrade
+
 # Dependencies
-RUN apk update
-RUN apk del libressl2.5-libssl
 RUN apk upgrade && apk add \
     curl \
     freetype \
@@ -28,8 +32,9 @@ RUN apk upgrade && apk add \
 
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
         freetype-dev \
-        gcc \
         g++ \
+        gcc \
+        gdal-dev@edge \
         gfortran \
         ghostscript-dev \
         imagemagick-dev \
@@ -37,21 +42,20 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         lapack-dev \
         lcms2-dev \
         libffi-dev \
-        libwebp-dev \
         libressl-dev \
+        libwebp-dev \
         libxml2-dev \
         libxslt-dev \
         linux-headers \
         musl-dev \
         openjpeg-dev \
         postgresql-dev \
+        proj4-dev@edge \
         readline-dev \
         tiff-dev \
         yaml-dev \
         zlib-dev \
     ; fi
-    # gdal-dev not yet in 3.6
-    # libproj4-dev not yet in 3.6
 
 # Python environment setup
 RUN curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python
