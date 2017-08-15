@@ -10,25 +10,25 @@ RUN echo @edge http://nl.alpinelinux.org/alpine/edge/community >> /etc/apk/repos
 RUN apk update && apk upgrade
 
 # Dependencies
-RUN apk upgrade && apk add \
-    curl \
-    freetype \
-    gettext \
-    jpeg \
-    lcms2 \
-    libffi \
-    libressl2.5-libtls \
-    libwebp \
-    libxml2 \
-    libxslt \
-    openjpeg \
-    postgresql-libs \
-    postgresql-client \
-    tiff \
-    tini \
-    yaml
-    # gdal not yet in 3.6
-    # proj4 not yet in 3.6
+RUN apk add \
+        curl \
+        freetype \
+        gdal@edge \
+        gettext \
+        jpeg \
+        lcms2 \
+        libffi \
+        libressl2.5-libtls \
+        libwebp \
+        libxml2 \
+        libxslt \
+        openjpeg \
+        postgresql-client \
+        postgresql-libs \
+        proj4@edge \
+        tiff \
+        tini \
+        yaml
 
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
         freetype-dev \
