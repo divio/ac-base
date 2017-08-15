@@ -1,6 +1,13 @@
 Changelog
 =========
 
+3.26 (2017-08-16)
+-----------------
+
+* Add support for postgis
+* Add workaround for stack size due to musl-c limitations
+
+
 3.25 (2017-08-15)
 -----------------
 
