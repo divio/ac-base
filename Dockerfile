@@ -1,4 +1,4 @@
-FROM python:3.6.1-alpine3.6 AS build
+FROM python:3.6.2-alpine3.6 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -31,6 +31,8 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         gcc \
         g++ \
         gfortran \
+        ghostscript-dev \
+        imagemagick-dev \
         jpeg-dev \
         lapack-dev \
         lcms2-dev \
