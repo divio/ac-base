@@ -14,8 +14,8 @@ test:
 	docker run --rm -it $(IMAGE_NAME) pip install psycopg2 cryptography numpy scipy pillow lxml pyyaml
 
 all:
-	$(MAKE) target_build TARGET=prod
-	$(MAKE) target_build TARGET=dev
+	$(MAKE) build TARGET=prod
+	$(MAKE) build TARGET=dev
 
 docker_hub_build:
 ifneq (,$(findstring -dev,$(IMAGE_NAME)))
