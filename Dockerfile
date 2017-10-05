@@ -1,4 +1,4 @@
-FROM python:3.6.2-alpine3.6 AS build
+FROM python:3.6.3-alpine3.6 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -23,6 +23,7 @@ RUN apk add \
         libxml2 \
         libxslt \
         openjpeg \
+        pcre \
         postgresql-client \
         postgresql-libs \
         proj4@edge \
@@ -49,6 +50,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         linux-headers \
         musl-dev \
         openjpeg-dev \
+        pcre-dev \
         postgresql-dev \
         proj4-dev@edge \
         readline-dev \
