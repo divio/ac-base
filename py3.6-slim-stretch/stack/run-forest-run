@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# re-runs a command forever if it fails. only exits if the command also exits cleanly.
+# usage:
+# run-forest-run "my-command-to-run" 2
+# will run "my-command-to-run". If it fails, it will wait for 2s and then re-run it.
+# TODO: make this a proper command with help text and stuff. and make it an installable script
+
+RC=1
+while [ ${RC} -ne 0 ]; do
+    ${1}
+    RC=$?
+    if [ ${RC} -ne 0 ]; then
+        echo "${1} exited with exit code ${RC}. Will re-run in ${2}s"
+        sleep $2
+    fi
+done
