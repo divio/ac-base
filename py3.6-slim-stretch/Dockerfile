@@ -37,6 +37,6 @@ ENV PYTHONUNBUFFERED=1 \
     NGINX_CONF_PATH=""
 WORKDIR /app
 VOLUME /data
-EXPOSE 80/tcp 443/tc
+EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/tini", "-g", "--"]
 CMD ["start", "web"]
