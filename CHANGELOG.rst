@@ -1,6 +1,13 @@
 Changelog
 =========
 
+4.4 (2017-11-03)
+-----------------
+
+* New build structure with alpine and stretch based builds in the same
+  github repo.
+
+
 3.27 (2017-10-05)
 -----------------
 
