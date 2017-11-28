@@ -11,6 +11,7 @@ zlib1g-dev
 libxslt-dev
 
 # uwsgi
+libpcre3-dev
 libssl-dev
 
 # psycopg2 needs this (for the pg_config command)
