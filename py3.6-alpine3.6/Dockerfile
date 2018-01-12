@@ -16,7 +16,7 @@ ENV NVM_DIR=/opt/nvm \
     NVM_VERSION=0.33.5
 
 RUN df -h
-RUN apk add apk-tools bash curl nodejs
+RUN apk add apk-tools bash curl
 
 COPY py3.6-alpine3.6/stack /stack/base
 RUN bash /stack/base/install.sh
@@ -45,9 +45,11 @@ RUN rm -rf /root/.cache
 # Application environment setup
 RUN mkdir -p /app
 
+FROM mhart/alpine-node:6 AS node
 
-FROM scratch
 COPY --from=build / /
+FROM scratch
+COPY --from=node / /
 
 # Execution environment setup
 ENV WHEELS_PLATFORM=alpine36-py36 \
