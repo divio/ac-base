@@ -48,11 +48,13 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         libxml2-dev \
         libxslt-dev \
         linux-headers \
+        make \
         musl-dev \
         openjpeg-dev \
         pcre-dev \
         postgresql-dev \
         proj4-dev@edge \
+        python2 \
         readline-dev \
         tiff-dev \
         yaml-dev \
