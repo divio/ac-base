@@ -54,7 +54,6 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         pcre-dev \
         postgresql-dev \
         proj4-dev@edge \
-        python2 \
         readline-dev \
         tiff-dev \
         yaml-dev \
