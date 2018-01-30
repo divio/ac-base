@@ -48,6 +48,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         libxml2-dev \
         libxslt-dev \
         linux-headers \
+        make \
         musl-dev \
         openjpeg-dev \
         pcre-dev \
