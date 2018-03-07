@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED=1 \
     NVM_DIR=/opt/nvm \
     NVM_VERSION=0.33.5
 
-COPY py3.6-slim-stretch/stack /stack/base
+COPY stack /stack/base
 RUN DEBIAN_FRONTEND=noninteractive /stack/base/install.sh
 
 FROM scratch

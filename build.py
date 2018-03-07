@@ -22,24 +22,19 @@ def parse_image_name(image_name):
     return repo, tag, target
 
 
-def get_dockerfile_path_from_tag(tag):
+def get_context_path_from_tag(tag):
     version, directory = tag.split('-', 1)
     if directory.endswith('-dev'):
         directory = directory[:-4]
-    return os.path.join(directory, 'Dockerfile')
+    return directory
 
 
 def get_build_command(repo, tag, target):
     return [
-        'docker',
-        'build',
-        '-t',
-        get_image_name(repo, tag, target),
-        '--build-arg',
-        'TARGET={}'.format(target),
-        '-f',
-        get_dockerfile_path_from_tag(tag=tag),
-        '.'
+        'docker', 'build',
+        '-t', get_image_name(repo, tag, target),
+        '--build-arg', 'TARGET={}'.format(target),
+        get_context_path_from_tag(tag=tag,)
     ]
 
 
