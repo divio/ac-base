@@ -44,13 +44,7 @@ def get_build_command(repo, tag, target):
 
 
 def get_test_command(repo, tag, target):
-    return [
-        'docker',
-        'run',
-        '-it',
-        get_image_name(repo, tag, target),
-        'pip',
-        'install',
+    packages = [
         'psycopg2',
         'cryptography',
         'numpy',
@@ -59,6 +53,10 @@ def get_test_command(repo, tag, target):
         'lxml',
         'pyyaml',
     ]
+    return [
+        'docker', 'run', '-it', get_image_name(repo, tag, target),
+        'pip', 'install',
+    ] + packages
 
 
 def main():
@@ -104,7 +102,10 @@ def main():
         print('Missing parameters!')
         exit(code=1)
     if tag.endswith('-dev'):
-        print('Do not include the -dev suffix in the tag. Set --target instead')
+        print(
+            'Do not include the -dev suffix in the tag. '
+            'Set `--target` instead.'
+        )
         exit(code=1)
 
     if operation == 'build':
