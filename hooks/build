@@ -1,2 +1,2 @@
 #!/bin/sh
-make docker_hub_build
+python build.py build
