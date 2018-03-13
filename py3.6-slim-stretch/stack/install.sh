@@ -7,6 +7,8 @@ set -e
 
 PYTHON_MAJOR_VERSION=$(python -c 'import platform; print(platform.python_version_tuple()[0])')
 
+PYTHON_SITE_PACKAGES_ROOT=$(python -c 'from distutils.sysconfig import get_python_lib; print(get_python_lib())')
+
 SCRIPT=$(readlink -f "$0")
 BASEDIR=$(dirname "$SCRIPT")
 
