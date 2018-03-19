@@ -1,0 +1,20 @@
+# All dependencies needed to build wheels for python packages.
+gcc
+build-essential
+libffi-dev
+
+# Pillow
+libjpeg62-turbo-dev
+zlib1g-dev
+
+# lxml
+libxslt-dev
+
+# uwsgi
+libpcre3-dev
+libssl-dev
+
+# psycopg2 needs this (for the pg_config command)
+libpq-dev
+
+libyaml-dev
