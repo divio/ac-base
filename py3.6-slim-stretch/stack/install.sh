@@ -33,12 +33,7 @@ cat ${BASEDIR}/packages.prod.txt | sed '/^#/ d' | sed '/^$/d' | xargs apt-get in
 # If we're building the dev image install the dev packages
 if [ "$TARGET" = "dev" ] ; then cat ${BASEDIR}/packages.dev.txt | sed '/^#/ d' | sed '/^$/d' | xargs apt-get install -y --no-install-recommends ; fi
 
-
-if [ $PYTHON_MAJOR_VERSION -eq 3 ]
-then
-    # the official python 3 docker image does not have virtualenv installed
-    pip3 install virtualenv
-fi
+pip install virtualenv
 
 #
 # pipsi for simple installation of python commands
