@@ -1,0 +1,30 @@
+wget
+curl
+postgresql-client-9.6
+
+# Pillow
+zlib1g
+# Pillow: The prebuilt wheel from pypi expects libtiff to be installed :-(
+# libtiff5
+# Pillow: jpeg support
+libjpeg62-turbo
+
+# Required Certificates to avoid SSL errors with python requests and and other http libs.
+ca-certificates
+
+# lxml
+libxslt1.1
+
+# For uwsgi. Must match the dev packages
+libssl1.1
+# uwsgi: needed for routing options
+libpcre3
+
+# For cryptography
+libffi6
+
+# Faster yaml parsing with pyaml
+libyaml-0-2
+
+# For django i18n
+gettext
