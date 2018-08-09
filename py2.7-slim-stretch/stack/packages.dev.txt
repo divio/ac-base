@@ -4,8 +4,13 @@ build-essential
 libffi-dev
 
 # Pillow
-libjpeg62-turbo-dev
 zlib1g-dev
+libjpeg62-turbo-dev
+libfreetype6-dev
+libtiff-dev
+libwebp-dev
+libopenjp2-7-dev
+liblcms2-dev
 
 # lxml
 libxslt-dev
