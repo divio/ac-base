@@ -6,6 +6,8 @@ postgresql-client-9.6
 zlib1g
 libjpeg62-turbo
 libfreetype6
+libopenjp2-7
+libtiff5
 
 # Required Certificates to avoid SSL errors with python requests and and other http libs.
 ca-certificates
