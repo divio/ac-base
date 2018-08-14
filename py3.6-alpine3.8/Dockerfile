@@ -1,4 +1,4 @@
-FROM python:3.6.6-alpine3.7 AS build
+FROM python:3.6.6-alpine3.8 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -18,7 +18,7 @@ RUN apk add \
         jpeg \
         lcms2 \
         libffi \
-        libressl2.6-libtls \
+        libressl2.7-libtls \
         libwebp \
         libxml2 \
         libxslt \
