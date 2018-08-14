@@ -1,4 +1,4 @@
-FROM python:3.6.4-alpine3.6 AS build
+FROM python:3.6.6-alpine3.6 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -22,6 +22,7 @@ RUN apk add \
         libwebp \
         libxml2 \
         libxslt \
+        mailcap \
         openjpeg \
         pcre \
         postgresql-client \
