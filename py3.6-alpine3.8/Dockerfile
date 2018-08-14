@@ -89,7 +89,7 @@ FROM scratch
 COPY --from=build / /
 
 # Execution environment setup
-ENV WHEELS_PLATFORM=alpine37-py36 \
+ENV WHEELS_PLATFORM=alpine38-py36 \
     PROCFILE_PATH=/app/Procfile \
     PATH=/root/.local/bin:$PATH \
     NGINX_CONF_PATH=/dev/null
