@@ -61,11 +61,11 @@ python ${BASEDIR}/get-pipsi.py
 #    default if pipsi was installed with python3). If pip-tools were installed
 #    in python2 while using it in python3, some wheel packages would not be
 #    recognized on pypi and our wheels proxy.
-pipsi install https://github.com/aldryncore/pip-tools/archive/1.9.0.1.tar.gz#egg=pip-tools==1.9.0.1
+pipsi install https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2
 
 # pip-reqs: requirements evaluator and client for the wheels proxy remote
 # requirements compilation/resolution API
-pipsi install pip-reqs==0.5
+pipsi install pip-reqs==0.6
 
 # start: a simple tool to start one process out of a Procfile
 pipsi install start==0.2
@@ -75,7 +75,7 @@ pipsi install start==0.2
 # ENTRYPOINT ["/tini", "--"]
 # in the Dockerfile to make it the default method for starting processes.
 # https://github.com/krallin/tini
-curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.16.1/tini
+curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini
 chmod +x /tini
 
 # cleanup
