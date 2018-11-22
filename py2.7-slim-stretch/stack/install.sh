@@ -79,12 +79,6 @@ pipsi install start==0.2
 curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini
 chmod +x /tini
 
-# cleanup
-apt-get autoremove -y
-rm -rf /var/lib/apt/lists/*
-rm -rf /tmp/*
-apt-get clean
-
 # workaround for a bug in hub.docker.com
 ln -s -f /bin/true /usr/bin/chfn
 
@@ -110,3 +104,9 @@ mkdir -p /app && mkdir -p /data
 
 # Add a dummy Procfile
 echo 'web: echo "Define your own scripts here"' > /app/Procfile
+
+# Cleanup
+apt-get autoremove -y
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+rm -rf /tmp/*
