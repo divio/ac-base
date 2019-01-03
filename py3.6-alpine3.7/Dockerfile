@@ -1,4 +1,4 @@
-FROM python:3.6.6-alpine3.7 AS build
+FROM python:3.6.8-alpine3.7 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -74,9 +74,6 @@ RUN if [ "$TARGET" = "dev" ] ; then pipsi install 'https://github.com/aldryncore
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.py
 RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.pth
-# Workaround for stack size issues on musl-c, see the following URL for details:
-# https://github.com/voidlinux/void-packages/issues/4147
-RUN echo 'import threading; threading.stack_size(8 * 1024 ** 2)' >/usr/local/lib/python3.6/site-packages/set_threads_stack_size.pth
 
 # Cleanup
 RUN rm -rf /root/.cache
