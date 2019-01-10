@@ -23,7 +23,7 @@ mkdir -p /usr/share/man/man7/
 apt-get update
 
 # Update system
-apt-get upgrade
+apt-get upgrade -y
 
 #
 # SYSTEM PACKAGES
