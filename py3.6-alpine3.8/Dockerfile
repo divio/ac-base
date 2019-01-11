@@ -66,7 +66,7 @@ RUN curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py |
 RUN /root/.local/venvs/pipsi/bin/pip install virtualenv
 RUN ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv
 
-RUN pipsi install pip-reqs==0.6
+RUN pip install pip-reqs==0.7.1
 # `start` has no requirements, install through pip instead of pipsi to save
 # some space by avoiding to setup a full virtualenv.
 RUN pip install start==0.2
