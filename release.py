@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python2
 # This script uses python 2.7.6 and only the standardlib because that is what
 # is available on in the context of the build hook on docker cloud / dockerhub.
 import os
@@ -21,7 +21,7 @@ def extract_versions(tags):
 
 
 def versions(args):
-    for flavor in args.flavors:
+    for flavor in sorted(args.flavors):
         print(flavor)
         tags = get_tags(flavor)
         versions = extract_versions(tags)
@@ -31,7 +31,13 @@ def versions(args):
             sys.exit(-1)
 
         if args.last:
-            print(versions[-1])
+            version = versions[-1]
+            print(version)
+            if args.push:
+                tag = "{}-{}".format(version, flavor)
+                remote = args.push
+                print("Pushing tag {} to {}".format(tag, remote))
+                subprocess.check_call(["git", "push", remote, tag])
         elif args.next:
             if versions:
                 version = versions[-1]
@@ -69,6 +75,7 @@ def main():
     parser_versions.add_argument("--last", action="store_true")
     parser_versions.add_argument("--next", nargs="?", const="minor")
     parser_versions.add_argument("--tag", action="store_true")
+    parser_versions.add_argument("--push")
     parser_versions.add_argument("flavors", nargs="+")
     parser_versions.set_defaults(func=versions)
 

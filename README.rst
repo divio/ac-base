@@ -21,6 +21,22 @@ Tag commits with the desired Docker image tag, in the form::
 
    git tag <version>-<flavour>
 
-Then push the tags to GitHub to trigger an automatic build on Docker Cloud::
+For your convenience, the `release.py` script can be used to streamline the
+tagging operations::
 
-   git push --tags
+   ./release.py versions --next=minor py*
+
+The command outputs the new tags which would be applied to the repository. Once
+asserted the result is correct, re-run the command with the `--tag` flag::
+
+   ./release.py versions --next=minor --tag py*
+
+Then push the tags to GitHub to trigger an automatic build on Docker
+Cloud::
+
+   git push --tags github
+
+Please note that GitHub will not trigger webhooks when pushing more than 2 tags
+at the same time. When more than two images are updated, push using::
+
+   ./release.py versions --push=github --last py*
