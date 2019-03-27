@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.3 (unreleased)
+1.3 (2019-03-27)
 ----------------
 
 * Upgrade to Python 3.6.8.
