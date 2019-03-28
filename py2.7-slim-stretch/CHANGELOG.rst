@@ -1,6 +1,13 @@
 Changelog
 =========
 
+4.6 (2019-03-28)
+----------------
+
+* Upgrade to pip-reqs 0.8.0.
+* Install pip-tools only on the -dev image.
+
+
 4.5 (2019-03-27)
 ----------------
 

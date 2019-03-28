@@ -56,20 +56,16 @@ python ${BASEDIR}/get-pipsi.py
 # MISC
 #
 
-# pip-tools: requirements evaluator
-#    to work correctly on python3 it must be installed with python3 (that is the
-#    default if pipsi was installed with python3). If pip-tools were installed
-#    in python2 while using it in python3, some wheel packages would not be
-#    recognized on pypi and our wheels proxy.
-pipsi install https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2
+pip install pip-reqs==0.8.0
+pip install start==0.2
 
-
-# pip-reqs: requirements evaluator and client for the wheels proxy remote
-# requirements compilation/resolution API
-pipsi install pip-reqs==0.7.2
-
-# start: a simple tool to start one process out of a Procfile
-pipsi install start==0.2
+# TODO: Avoid the need for pip-tools
+if [ "$TARGET" = "dev" ] ; then \
+        curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
+        /root/.local/venvs/pipsi/bin/pip install virtualenv && \
+        ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
+        pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
+   ; fi
 
 # tini: minimal PID 1 init. reaps zombie processes and forwards signals.
 # set
