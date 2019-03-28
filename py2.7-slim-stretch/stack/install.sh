@@ -42,11 +42,13 @@ if [ "$TARGET" = "dev" ] ; then cat ${BASEDIR}/packages.dev.txt | sed '/^#/ d' |
 
 pip install pip-reqs==0.8.0
 pip install start==0.2
+pip install virtualenv
 
 # TODO: Avoid the need for pip-tools
 if [ "$TARGET" = "dev" ] ; then \
-        curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
-        /root/.local/venvs/pipsi/bin/pip install virtualenv && \
+        wget https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py && \
+        python get-pipsi.py --no-modify-path && \
+        rm get-pipsi.py && \
         ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
         pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
    ; fi

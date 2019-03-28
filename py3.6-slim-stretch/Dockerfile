@@ -3,7 +3,7 @@ FROM python:3.6.8-slim-stretch AS build
 ARG TARGET=prod
 
 ENV PYTHONUNBUFFERED=1 \
-    PATH=/root/.pipsi/bin:$PATH \
+    PATH=/root/.local/bin:$PATH \
     PROCFILE_PATH=/app/Procfile \
     LC_ALL=C.UTF-8 \
     NVM_DIR=/opt/nvm \
@@ -62,8 +62,9 @@ RUN pip install start==0.2
 
 # TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
-        curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
-        /root/.local/venvs/pipsi/bin/pip install virtualenv && \
+        wget https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py && \
+        python get-pipsi.py --no-modify-path && \
+        rm get-pipsi.py && \
         ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
         pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
    ; fi
