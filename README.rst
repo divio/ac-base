@@ -14,6 +14,16 @@ To locally build an image, run the following command::
 Check `./build.py --help` for additional information.
 
 
+Test all images
+---------------
+
+You can build and test all images locally by running::
+
+   ls -d py* | xargs -I '{}' ./build.py --repo divio/base --target=prod --tag {} build
+   ls -d py* | xargs -I '{}' ./build.py --repo divio/base --target=dev --tag {} build
+   ls -d py* | xargs -I '{}' ./build.py --repo divio/base --tag {} test
+
+
 Release process
 ---------------
 
@@ -40,3 +50,10 @@ Please note that GitHub will not trigger webhooks when pushing more than 2 tags
 at the same time. When more than two images are updated, push using::
 
    ./release.py versions --push=github --last py*
+
+
+Adding a new base image
+-----------------------
+
+Add a directory at the root containing an appropriate `Dockerfile``. The image
+will be tagged as `divio/base:<version>-<directory-name>`.

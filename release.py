@@ -22,7 +22,6 @@ def extract_versions(tags):
 
 def versions(args):
     for flavor in sorted(args.flavors):
-        print(flavor)
         tags = get_tags(flavor)
         versions = extract_versions(tags)
 
@@ -32,13 +31,14 @@ def versions(args):
 
         if args.last:
             version = versions[-1]
-            print(version)
+            tag = "{}-{}".format(version, flavor)
+            print(tag)
             if args.push:
-                tag = "{}-{}".format(version, flavor)
                 remote = args.push
                 print("Pushing tag {} to {}".format(tag, remote))
                 subprocess.check_call(["git", "push", remote, tag])
         elif args.next:
+            print(flavor)
             if versions:
                 version = versions[-1]
                 major, minor, patch = version.version
@@ -62,6 +62,7 @@ def versions(args):
             else:
                 print(version)
         else:
+            print(flavor)
             for version in reversed(versions):
                 print(version)
 
