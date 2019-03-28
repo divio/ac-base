@@ -36,22 +36,6 @@ cat ${BASEDIR}/packages.prod.txt | sed '/^#/ d' | sed '/^$/d' | xargs apt-get in
 # If we're building the dev image install the dev packages
 if [ "$TARGET" = "dev" ] ; then cat ${BASEDIR}/packages.dev.txt | sed '/^#/ d' | sed '/^$/d' | xargs apt-get install -y --no-install-recommends ; fi
 
-pip install virtualenv
-
-#
-# pipsi for simple installation of python commands
-#
-# - Unfortunatly the current release on pypi (0.9) does not work with python3.
-# - get-pipsi.py does some setup stuff, we want to continue to use it.
-# - The unaltered get-pipsi.py tries to install the broken version from pypi.
-# So: we install pipsi with an altered get-pipsi.py to use the version from
-#     gitub. It'll use python 2 or 3 depending on the base image. The github
-#     version won't explode when using it to install commands installed in
-#     python3 (e.g pip-tools).
-
-# NOTE: PATH=/root/.local/bin:$PATH must be set in the Dockerfile
-python ${BASEDIR}/get-pipsi.py
-
 #
 # MISC
 #
