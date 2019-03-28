@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.5 (2019-03-28)
+----------------
+
+* Upgrade to pip-reqs 0.8.0.
+* Remove NGINX_CONF_PATH environment variable.
+
+
 1.4 (2019-01-11)
 ----------------
 
