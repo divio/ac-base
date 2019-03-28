@@ -62,15 +62,16 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
     ; fi
 
 # Python environment setup
-RUN curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python
-RUN /root/.local/venvs/pipsi/bin/pip install virtualenv
-RUN ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv
-
-RUN pipsi install pip-reqs==0.7.2
-# `start` has no requirements, install through pip instead of pipsi to save
-# some space by avoiding to setup a full virtualenv.
+RUN pip install pip-reqs==0.8.0
 RUN pip install start==0.2
-RUN if [ "$TARGET" = "dev" ] ; then pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' ; fi
+
+# TODO: Avoid the need for pip-tools
+RUN if [ "$TARGET" = "dev" ] ; then \
+        curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
+        /root/.local/venvs/pipsi/bin/pip install virtualenv && \
+        ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
+        pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
+   ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.py
 RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.pth
