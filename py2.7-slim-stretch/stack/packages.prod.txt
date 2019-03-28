@@ -1,6 +1,7 @@
 wget
 curl
 postgresql-client-9.6
+mime-support
 
 # Pillow
 zlib1g

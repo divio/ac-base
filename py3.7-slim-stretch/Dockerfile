@@ -27,6 +27,7 @@ RUN apt-get install -y --no-install-recommends \
         libtiff5 \
         libxslt1.1 \
         libyaml-0-2 \
+        mime-support \
         postgresql-client-9.6 \
         wget \
         zlib1g
