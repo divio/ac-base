@@ -70,8 +70,8 @@ RUN if [ "$TARGET" = "dev" ] ; then \
         pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
    ; fi
 
-COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.7/site-packages/add_addons_dev_to_syspath.py
-RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.7/site-packages/add_addons_dev_to_syspath.pth
+COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.py
+RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.6/site-packages/add_addons_dev_to_syspath.pth
 
 # Install nvm
 # This base project ships with nvm only. Node and NPM can
