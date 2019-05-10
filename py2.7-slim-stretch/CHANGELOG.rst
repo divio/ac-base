@@ -1,10 +1,16 @@
 Changelog
 =========
 
-4.7 (2019-03-28)
------------------
+4.8 (2019-05-10)
+----------------
 
-* Add mime-support package
+* Correctly set the pipsi path.
+
+
+4.7 (2019-03-28)
+----------------
+
+* Add mime-support package.
 
 
 4.6 (2019-03-28)
