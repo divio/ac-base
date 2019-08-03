@@ -6,84 +6,88 @@ import argparse
 
 
 def get_image_name(repo, tag, target):
-    if target == 'prod':
-        return '{}:{}'.format(repo, tag)
+    if target == "prod":
+        return "{}:{}".format(repo, tag)
     else:
-        return '{}:{}-{}'.format(repo, tag, target)
+        return "{}:{}-{}".format(repo, tag, target)
 
 
 def parse_image_name(image_name):
-    repo, tag = image_name.rsplit(':', 1)
-    if tag.endswith('-dev'):
+    repo, tag = image_name.rsplit(":", 1)
+    if tag.endswith("-dev"):
         tag = tag[:-4]
-        target = 'dev'
+        target = "dev"
     else:
-        target = 'prod'
+        target = "prod"
     return repo, tag, target
 
 
 def get_context_path_from_tag(tag):
-    version, directory = tag.split('-', 1)
-    if directory.endswith('-dev'):
+    version, directory = tag.split("-", 1)
+    if directory.endswith("-dev"):
         directory = directory[:-4]
     return directory
 
 
 def get_build_command(repo, tag, target):
     return [
-        'docker', 'build',
-        '-t', get_image_name(repo, tag, target),
-        '--build-arg', 'TARGET={}'.format(target),
-        get_context_path_from_tag(tag=tag,)
+        "docker",
+        "build",
+        "-t",
+        get_image_name(repo, tag, target),
+        "--build-arg",
+        "TARGET={}".format(target),
+        get_context_path_from_tag(tag=tag),
     ]
 
 
 def get_test_command(repo, tag, target):
     packages = [
-        'psycopg2',
-        'cryptography',
-        'numpy',
-        'scipy',
-        'pillow',
-        'lxml',
-        'pyyaml',
+        "psycopg2",
+        "cryptography",
+        "numpy",
+        "scipy",
+        "pillow",
+        "lxml",
+        "pyyaml",
     ]
     return [
-        'docker', 'run', '-it', get_image_name(repo, tag, target),
-        'pip', 'install',
+        "docker",
+        "run",
+        "-it",
+        get_image_name(repo, tag, target),
+        "pip",
+        "install",
     ] + packages
 
 
 def main():
     parser = argparse.ArgumentParser(
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("operation", help='The operation: "build" or "test"')
+    parser.add_argument(
+        "--repo",
+        default=os.environ.get("DOCKER_REPO", "divio/base"),
+        help="The repository name",
     )
     parser.add_argument(
-        'operation',
-        help='The operation: "build" or "test"'
-    )
-    parser.add_argument(
-        '--repo',
-        default=os.environ.get('DOCKER_REPO', 'divio/base'),
-        help='The repository name',
-    )
-    parser.add_argument(
-        '--tag',
-        default=os.environ.get('DOCKER_TAG', ''),
+        "--tag",
+        default=os.environ.get("DOCKER_TAG", ""),
         help='A tag name like "4.42-py3.6-alpine". Do not include the "-dev" '
-             'suffix, instead set the --target option.',
+        "suffix, instead set the --target option.",
     )
     parser.add_argument(
-        '--target',
-        default=os.environ.get('TARGET', 'prod'),
-        help='The build target (dev or prod).',
+        "--target",
+        default=os.environ.get("TARGET", "prod"),
+        help="The build target (dev or prod).",
     )
 
     args = parser.parse_args()
 
     operation = args.operation
 
-    image_name = os.environ.get('IMAGE_NAME')
+    image_name = os.environ.get("IMAGE_NAME")
     if image_name:
         # When dockerhub builds IMAGE_NAME will be set and will override any
         # other options.
@@ -94,27 +98,27 @@ def main():
         tag = str(args.tag)
         target = str(args.target)
     if not (repo and tag and target):
-        print('Missing parameters!')
+        print("Missing parameters!")
         exit(code=1)
-    if tag.endswith('-dev'):
+    if tag.endswith("-dev"):
         print(
-            'Do not include the -dev suffix in the tag. '
-            'Set `--target` instead.'
+            "Do not include the -dev suffix in the tag. "
+            "Set `--target` instead."
         )
         exit(code=1)
 
-    if operation == 'build':
+    if operation == "build":
         command = get_build_command(repo=repo, tag=tag, target=target)
-    elif operation == 'test':
+    elif operation == "test":
         command = get_test_command(repo=repo, tag=tag, target=target)
 
-    print('repo: {}'.format(repo))
-    print('tag: {}'.format(tag))
-    print('target: {}'.format(target))
-    print('command:')
-    print(' '.join(command))
+    print("repo: {}".format(repo))
+    print("tag: {}".format(tag))
+    print("target: {}".format(target))
+    print("command:")
+    print(" ".join(command))
     os.execvp(command[0], command)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
