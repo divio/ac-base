@@ -151,6 +151,7 @@ COPY --from=build / /
 
 ENV LC_ALL=C.UTF-8 \
     NVM_DIR=/opt/nvm \
+    PROCFILE_PATH=/app/Procfile \
     PATH=/root/.local/bin:$PATH
 
 WORKDIR /app
