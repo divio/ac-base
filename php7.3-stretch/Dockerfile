@@ -4,29 +4,8 @@ ENV PATH=/root/.local/bin:$PATH \
     DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8 \
     NVM_DIR=/opt/nvm \
-    NVM_VERSION=0.34.0
-
-USER root
-
-RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
-RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
-
-RUN dpkg-reconfigure -f noninteractive tzdata
-RUN apt-get update && apt-get upgrade -y
-
-RUN apt-get install -yqq \
-      apt-transport-https \
-      apt-utils \
-      build-essential \
-      curl \
-      dumb-init \
-      gnupg2 \
-      libc-client-dev \
-      nginx \
-      openssh-client \
-      unzip \
-      zlib1g-dev \
-      --no-install-recommends
+    NVM_VERSION=0.34.0 \
+    MEMCACHE_VERSION=3.1.3
 
 ENV BUILD_DEPENDENCIES=" \
     libbz2-dev \
@@ -71,9 +50,17 @@ ENV EXTENSIONS=" \
     zip \
     "
 
-RUN apt-get -yqq install $BUILD_DEPENDENCIES --no-install-recommends \
+USER root
+
+RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
+RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
+
+RUN dpkg-reconfigure -f noninteractive tzdata
+
+RUN apt-get update && apt-get upgrade -y \
+  && apt-get install -yqq apt-transport-https apt-utils build-essential curl dumb-init gnupg2 libc-client-dev nginx openssh-client unzip zlib1g-dev --no-install-recommends \
+  && apt-get -yqq install $BUILD_DEPENDENCIES --no-install-recommends \
   && apt-get -yqq install $RUNTIME_DEPENDENCIES --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/* \
   && docker-php-ext-install -j$(nproc) $EXTENSIONS \
   && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
     --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
@@ -85,9 +72,9 @@ RUN apt-get -yqq install $BUILD_DEPENDENCIES --no-install-recommends \
   && docker-php-ext-install -j$(nproc) imap
 
 RUN docker-php-source extract \
-  && curl -L -s https://github.com/php-memcached-dev/php-memcached/archive/v3.1.3.zip -o /tmp/php-memcached-3.1.3.zip \
-  && unzip /tmp/php-memcached-3.1.3.zip -d /tmp \
-  && mv /tmp/php-memcached-3.1.3 /usr/src/php/ext/memcached \
+  && curl -L -s https://github.com/php-memcached-dev/php-memcached/archive/v$MEMCACHE_VERSION.zip -o /tmp/php-memcached-$MEMCACHE_VERSION.zip \
+  && unzip /tmp/php-memcached-$MEMCACHE_VERSION.zip -d /tmp \
+  && mv /tmp/php-memcached-$MEMCACHE_VERSION /usr/src/php/ext/memcached \
   && docker-php-ext-install memcached \
   && docker-php-ext-enable memcached \
   && docker-php-source delete
