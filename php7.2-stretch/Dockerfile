@@ -1,7 +1,7 @@
 FROM php:7.2-fpm-stretch AS build
 
 ENV PATH=/root/.local/bin:$PATH \
-    PROCFILE_PATH=/app/Procfile \
+    DEBIAN_FRONTEND=noninteractive \
     LC_ALL=C.UTF-8 \
     NVM_DIR=/opt/nvm \
     NVM_VERSION=0.34.0
@@ -11,10 +11,10 @@ USER root
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
 RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
-RUN DEBIAN_FRONTEND=noninteractive dpkg-reconfigure -f noninteractive tzdata
+RUN dpkg-reconfigure -f noninteractive tzdata
 RUN apt-get update && apt-get upgrade -y
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
+RUN apt-get install -yqq \
       apt-transport-https \
       apt-utils \
       build-essential \
@@ -26,15 +26,14 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -yqq \
       openssh-client \
       unzip \
       zlib1g-dev \
-      --no-install-recommends \
-  && rm -rf /var/lib/apt/lists/*
+      --no-install-recommends
 
-ENV buildDependencies=" \
+ENV BUILD_DEPENDENCIES=" \
     libbz2-dev \
     libsasl2-dev \
     "
 
-ENV runtimeDependencies=" \
+ENV RUNTIME_DEPENDENCIES=" \
     imagemagick \
     libfreetype6-dev \
     libicu-dev \
@@ -54,7 +53,7 @@ ENV runtimeDependencies=" \
     libzip-dev \
     "
 
-ENV extensions=" \
+ENV EXTENSIONS=" \
     bcmath \
     bz2 \
     calendar \
@@ -72,10 +71,10 @@ ENV extensions=" \
     zip \
     "
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -yqq install $buildDependencies --no-install-recommends \
-  && DEBIAN_FRONTEND=noninteractive apt-get -yqq install $runtimeDependencies --no-install-recommends \
+RUN apt-get -yqq install $BUILD_DEPENDENCIES --no-install-recommends \
+  && apt-get -yqq install $RUNTIME_DEPENDENCIES --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* \
-  && docker-php-ext-install -j$(nproc) $extensions \
+  && docker-php-ext-install -j$(nproc) $EXTENSIONS \
   && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
     --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
     --enable-gd-native-ttf \
@@ -117,12 +116,11 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN mkdir -p $NVM_DIR
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash
 
+# Install yarn in addition
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -yqq install yarn --no-install-recommends
-
-RUN apt-get purge -y --auto-remove $buildDependencies
+    && apt-get -yqq install yarn --no-install-recommends
 
 RUN curl -O https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz \
     && tar xf forego-stable-linux-amd64.tgz \
@@ -130,6 +128,8 @@ RUN curl -O https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz \
     && mv forego /usr/local/bin/forego
 
 # Cleanup
+RUN apt-get purge -y --auto-remove $BUILD_DEPENDENCIES
+
 RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     apt-utils \
     autoconf \
@@ -145,21 +145,19 @@ RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false
 RUN apt-get autoremove -y && apt-get autoclean -y
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/man /usr/share/doc /usr/share/doc-base /root/.cache
 
+# Copy composer binaries from official image
 WORKDIR /composer
 
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
-COPY ./scripts/*.sh /composer/
-RUN chmod a+x /composer/*.sh
 
-RUN bash ./install.sh \
-    && bash ./clean.sh \
-    && mkdir -p /var/www/html \
+RUN mkdir -p /var/www/html \
     && composer global require "hirak/prestissimo:^0.3" \
-    && rm -rf ~/.composer/cache/* \
-    && ln -sf /dev/stdout /var/log/nginx/access.log \
+    && rm -rf ~/.composer/cache/*
+
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY ./configs/nginx/vhost.conf /etc/nginx/sites-available/default
+COPY ./vhost.conf /etc/nginx/sites-available/default
 
 FROM scratch
 COPY --from=build / /
