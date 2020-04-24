@@ -43,6 +43,7 @@ ENV EXTENSIONS=" \
     opcache \
     pcntl \
     pdo_pgsql \
+    pdo_mysql \
     pgsql \
     soap \
     xml \
