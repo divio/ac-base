@@ -65,7 +65,6 @@ RUN apt-get update && apt-get upgrade -y \
   && docker-php-ext-install -j$(nproc) $EXTENSIONS \
   && docker-php-ext-configure gd --with-gd --with-webp-dir --with-jpeg-dir \
     --with-png-dir --with-zlib-dir --with-xpm-dir --with-freetype-dir \
-    --enable-gd-native-ttf \
   && docker-php-ext-install -j$(nproc) gd \
   && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
   && docker-php-ext-install -j$(nproc) ldap \
