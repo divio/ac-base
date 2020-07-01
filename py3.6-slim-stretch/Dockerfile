@@ -1,4 +1,4 @@
-FROM python:3.6.8-slim-stretch AS build
+FROM python:3.6.11-slim-stretch AS build
 
 ARG TARGET=prod
 
