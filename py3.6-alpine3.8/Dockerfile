@@ -27,7 +27,7 @@ RUN apk add \
         pcre \
         postgresql-client \
         postgresql-libs \
-        proj4@edge \
+        proj@edge \
         tiff \
         tini \
         yaml
@@ -54,7 +54,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         openjpeg-dev \
         pcre-dev \
         postgresql-dev \
-        proj4-dev@edge \
+        proj-dev@edge \
         readline-dev \
         tiff-dev \
         yaml-dev \
