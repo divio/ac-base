@@ -21,7 +21,7 @@ You can build and test all images locally by running::
 
    ls -d py* | xargs -I '{}' ./build.py --repo divio/base --target=prod --tag test-{} build
    ls -d py* | xargs -I '{}' ./build.py --repo divio/base --target=dev --tag test-{} build
-   ls -d py* | xargs -I '{}' ./build.py --repo divio/base --tag test-{} test
+   ls -d py* | xargs --open-tty -I '{}' ./build.py --repo divio/base --target=dev --tag test-{} test
 
 
 Release process
