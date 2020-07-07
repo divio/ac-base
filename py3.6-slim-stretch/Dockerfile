@@ -58,7 +58,7 @@ RUN curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/rele
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install pip-reqs==0.8.0
+RUN pip install pip-reqs==0.8.5
 RUN pip install start==0.2
 
 # TODO: Avoid the need for pip-tools
