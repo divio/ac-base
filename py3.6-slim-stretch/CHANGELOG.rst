@@ -1,8 +1,14 @@
 Changelog
 =========
 
+4.17 (2020-07-07)
+-----------------
+
+* Bumped Python base image to version 3.6.11.
+
+
 4.16 (2020-04-10)
-----------------
+-----------------
 
 * Build logs to multiple lines.
 
