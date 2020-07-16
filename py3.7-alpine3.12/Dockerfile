@@ -59,7 +59,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
     ; fi
 
 # Python environment setup
-RUN pip install pip-reqs==0.8.5
+RUN pip install pip-reqs==0.8.6
 RUN pip install start==0.2
 
 # TODO: Avoid the need for pip-tools
