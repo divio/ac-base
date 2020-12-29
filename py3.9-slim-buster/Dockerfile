@@ -1,13 +1,11 @@
-FROM python:3.9.0-slim-buster AS build
+FROM python:3.9.1-slim-buster AS build
 
 ARG TARGET=prod
 
 ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \
     PROCFILE_PATH=/app/Procfile \
-    LC_ALL=C.UTF-8 \
-    NVM_DIR=/opt/nvm \
-    NVM_VERSION=0.33.11
+    LC_ALL=C.UTF-8
 
 RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
 
@@ -18,6 +16,7 @@ RUN apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         gettext \
+        libcap2-bin \
         libffi6 \
         libfreetype6 \
         libjpeg62-turbo \
@@ -67,31 +66,11 @@ RUN pip install start==0.2
 
 # TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
-        curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
-        /root/.local/venvs/pipsi/bin/pip install virtualenv && \
-        ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
-        pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
+        pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.py
 RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.pth
-
-# Install nvm
-# This base project ships with nvm only. Node and NPM can
-# be installed in boilerplate using the following commands
-#
-#    ENV NODE_VERSION=0.12.14 \
-#        NPM_VERSION=2.15.5
-#    RUN source $NVM_DIR/nvm.sh && \
-#        nvm install $NODE_VERSION && \
-#        nvm alias default $NODE_VERSION && \
-#        nvm use default && \
-#        npm install -g npm@"$NPM_VERSION" && \
-#        npm cache clear
-#   ENV NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules \
-#       PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-RUN mkdir -p $NVM_DIR
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash
 
 # Cleanup
 RUN apt-get autoremove -y && \
@@ -100,6 +79,7 @@ RUN apt-get autoremove -y && \
 
 # Application environment setup
 RUN mkdir -p /app /data
+RUN useradd --create-home --user-group -u 1000 app
 
 
 FROM scratch
