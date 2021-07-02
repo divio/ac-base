@@ -72,21 +72,20 @@ def get_test_command(repo, tag, target):
         "lxml",
         "pyyaml",
     ]
-    pip_command = f"pip install --no-binary :all: {' '.join(packages)}"
+    pip_command = "pip install --no-binary :all: {}".format(" ".join(packages))
     return [
         "docker",
         "run",
-        "-v"
-        f"{os.path.dirname(__file__)}/.artifacts/test:/app:rw",
+        "-v" "{}/.artifacts/test:/app:rw".format(os.path.dirname(__file__)),
         "-e",
         "WHEELSPROXY_URL=https://wheels.aldryn.net/v1/pypi/buster-py39/",
         "-e",
-        f"NPY_NUM_BUILD_JOBS={os.cpu_count()}",
+        "NPY_NUM_BUILD_JOBS={}".format(os.cpu_count()),
         "-it",
         get_image_name(repo, tag, target),
         "sh",
         "-c",
-        f"pip-reqs compile && pip-reqs resolve && {pip_command}"
+        "pip-reqs compile && pip-reqs resolve && {}".format(pip_command),
     ]
 
 
