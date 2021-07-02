@@ -52,6 +52,12 @@ def get_test_command(repo, tag, target):
        resulting requirements.urls file will never be used);
     * `pip install` a series of packages known to stress the build phase (we
        force them to be build from source).
+
+    Note that the `pip-reqs` and the `pip install` steps are completely
+    independent on purpose (the installation step does not use the resolved
+    requirements from `pip-reqs`). We are just smoke testing `pip-reqs` on the
+    first step, and making sure that we are able to use the dev image to build
+    binary wheels in the second step.
     """
     with open(".artifacts/test/requirements.in", "w") as fh:
         fh.write("django\n")
