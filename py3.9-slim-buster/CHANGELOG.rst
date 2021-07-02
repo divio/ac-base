@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.2 (2021-07-02)
+----------------
+
+* Upgrade Python to 3.9.6.
+* Upgrade pip-reqs to 0.10.0 (fixes compatibility issues with pip).
+
+
 2.1 (2020-12-30)
 ----------------
 

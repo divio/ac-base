@@ -1,4 +1,4 @@
-FROM python:3.9.5-alpine3.13 AS build
+FROM python:3.9.6-alpine3.13 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -60,7 +60,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
     ; fi
 
 # Python environment setup
-RUN pip install pip-reqs==0.9.0
+RUN pip install pip-reqs==0.10.0
 RUN pip install start==0.2
 
 # TODO: Avoid the need for pip-tools
