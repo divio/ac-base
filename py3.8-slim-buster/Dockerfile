@@ -1,4 +1,4 @@
-FROM python:3.8.10-slim-buster AS build
+FROM python:3.8.11-slim-buster AS build
 
 ARG TARGET=prod
 
@@ -61,7 +61,7 @@ RUN curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/rele
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install pip-reqs==0.9.0
+RUN pip install pip-reqs==0.10.0
 RUN pip install start==0.2
 
 # TODO: Avoid the need for pip-tools

@@ -42,23 +42,52 @@ def get_build_command(repo, tag, target):
 
 
 def get_test_command(repo, tag, target):
+    """
+    Builds and returns a command to test the resulting image.
+
+    The tests execute the following operations:
+
+    * `pip-reqs` `compile` and `resolve` on an arbitrary platform (it's not an
+       issue if the platform does not match the platform of the image, as the
+       resulting requirements.urls file will never be used);
+    * `pip install` a series of packages known to stress the build phase (we
+       force them to be build from source).
+
+    Note that the `pip-reqs` and the `pip install` steps are completely
+    independent on purpose (the installation step does not use the resolved
+    requirements from `pip-reqs`). We are just smoke testing `pip-reqs` on the
+    first step, and making sure that we are able to use the dev image to build
+    binary wheels in the second step.
+    """
+    with open(".artifacts/test/requirements.in", "w") as fh:
+        fh.write("django\n")
+
     packages = [
         "psycopg2",
         "cryptography",
+        "pybind11",
         "numpy",
         "scipy",
         "pillow",
         "lxml",
         "pyyaml",
     ]
+    pip_command = f"pip install --no-binary :all: {' '.join(packages)}"
     return [
         "docker",
         "run",
+        "-v"
+        f"{os.path.dirname(__file__)}/.artifacts/test:/app:rw",
+        "-e",
+        "WHEELSPROXY_URL=https://wheels.aldryn.net/v1/pypi/buster-py39/",
+        "-e",
+        f"NPY_NUM_BUILD_JOBS={os.cpu_count()}",
         "-it",
         get_image_name(repo, tag, target),
-        "pip",
-        "install",
-    ] + packages
+        "sh",
+        "-c",
+        f"pip-reqs compile && pip-reqs resolve && {pip_command}"
+    ]
 
 
 def main():
