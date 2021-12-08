@@ -66,7 +66,6 @@ RUN pip install start==0.2
 # required for "pip compile" command in Python >= 3.8
 RUN pip install pip-tools
 
-# TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
         pip install flit flit-core setuptools-scm poetry auditwheel \
    ; fi

@@ -62,10 +62,11 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
 # Python environment setup
 RUN pip install pip-reqs==0.10.0
 RUN pip install start==0.2
+# required for "pip compile" command in Python >= 3.8
+RUN pip install pip-tools
 
-# TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
-        pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
+        pip install flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.py
