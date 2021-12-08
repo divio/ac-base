@@ -1,4 +1,4 @@
-FROM python:3.9.6-alpine3.13 AS build
+FROM python:3.9.9-alpine3.13 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH

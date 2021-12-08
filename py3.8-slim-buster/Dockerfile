@@ -1,4 +1,4 @@
-FROM python:3.8.11-slim-buster AS build
+FROM python:3.8.12-slim-buster AS build
 
 ARG TARGET=prod
 
@@ -63,10 +63,11 @@ RUN chmod +x /tini
 # Python environment setup
 RUN pip install pip-reqs==0.10.0
 RUN pip install start==0.2
+# required for "pip compile" command in Python >= 3.8
+RUN pip install pip-tools
 
-# TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
-        pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
+        pip install flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.8/site-packages/add_addons_dev_to_syspath.py

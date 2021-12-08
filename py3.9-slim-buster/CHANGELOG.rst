@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.3 (2021-12-08)
+----------------
+
+* Upgrade Python to 3.9.9.
+* Build image with pip-tools included independent of the chosen `TARGET`.
+
+
 2.2 (2021-07-02)
 ----------------
 
