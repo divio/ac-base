@@ -91,7 +91,8 @@ ENV LC_ALL=C.UTF-8 \
     PATH=/root/.local/bin:$PATH \
     PIP_REQUIRE_VIRTUALENV=false \
     PROCFILE_PATH=/app/Procfile \
-    PYTHONUNBUFFERED=1 
+    PYTHONUNBUFFERED=1 \
+    WHEELS_PLATFORM=bullseye-py310
 WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/tini", "-g", "--"]
