@@ -76,7 +76,7 @@ def get_test_command(repo, tag, target):
     return [
         "docker",
         "run",
-        "-v" "{}/.artifacts/test:/app:rw".format(os.path.dirname(__file__)),
+        "-v" "{}/.artifacts/test:/app:rw".format(os.path.abspath(os.path.dirname(__file__))),
         "-e",
         "WHEELSPROXY_URL=https://wheels.aldryn.net/v1/pypi/buster-py39/",
         "-e",
