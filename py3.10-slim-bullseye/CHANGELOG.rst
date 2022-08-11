@@ -1,6 +1,10 @@
 Changelog
 =========
 
+1.1 (2022-03-08)
+----------------
+
+* Added WHEELS_PLATFORM environment variable again.
 
 1.1 (2022-08-11)
 ----------------
