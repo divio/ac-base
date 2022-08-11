@@ -79,6 +79,15 @@ RUN rm -rf /root/.cache
 # Application environment setup
 RUN mkdir -p /app
 
+# The group of the following files has to be changed to root for multistage
+# builds to work with userns remapping enabled. This is a bug in the Docker
+# legacy builder: https://github.com/moby/moby/issues/34645
+
+# Initially belonging to group shadow
+RUN chgrp root \
+    /etc/shadow \
+    /etc/shadow.apk-new
+
 
 FROM scratch
 COPY --from=build / /
