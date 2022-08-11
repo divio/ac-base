@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-2.2 (2022-08-11)
+2.3 (2022-08-11)
 ----------------
 
 * Added a workaround for a Docker bug causing multistage builds to fail when
