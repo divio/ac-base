@@ -92,10 +92,40 @@ RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/inst
 # Cleanup
 RUN apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
+    rm -rf \
+        /var/lib/apt/lists/* \
+        /tmp/* \
+        /root/.cache \
+        /var/cache/apt/archives/partial \
+        /var/log/apt/term.log \
+        /run/utmp \
+        /var/log/wtmp \
+        /var/log/btmp \
+        /var/log/lastlog
 
 # Application environment setup
 RUN mkdir -p /app /data
+
+# The group of the following files has to be changed to root for multistage
+# builds to work with userns remapping enabled. This is a bug in the Docker
+# legacy builder: https://github.com/moby/moby/issues/34645
+
+# Initially belonging to group staff
+RUN chgrp -R root /usr/local /var/local
+
+# Initially belonging to group shadow
+RUN chgrp root \
+    /etc/gshadow \
+    /etc/shadow \
+    /usr/bin/expiry \
+    /usr/bin/chage \
+    /sbin/unix_chkpwd
+
+# Initially belonging to group tty
+RUN chgrp root /usr/bin/wall
+
+# Initially belonging to group mail
+RUN chgrp root /var/mail
 
 
 FROM scratch

@@ -76,13 +76,22 @@ RUN rm -rf /root/.cache
 
 # Application environment setup
 RUN mkdir -p /app
-RUN addgroup -S app && adduser -D -G app -u 1000 app
+
+# The group of the following files has to be changed to root for multistage
+# builds to work with userns remapping enabled. This is a bug in the Docker
+# legacy builder: https://github.com/moby/moby/issues/34645
+
+# Initially belonging to group shadow
+RUN chgrp root \
+    /etc/shadow \
+    /etc/shadow-
 
 
 FROM scratch
 COPY --from=build / /
 
 # Execution environment setup
+RUN addgroup -S app && adduser -D -G app -u 1000 app
 ENV WHEELS_PLATFORM=alpine313-py39 \
     PROCFILE_PATH=/app/Procfile \
     PATH=/root/.local/bin:$PATH

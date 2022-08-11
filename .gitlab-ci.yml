@@ -1,0 +1,4 @@
+include:
+  - project: divio/infra/gitlab-pipelines
+    ref: master
+    file: blank/.gitlab-ci.yml

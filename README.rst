@@ -57,3 +57,9 @@ Adding a new base image
 
 Add a directory at the root containing an appropriate `Dockerfile``. The image
 will be tagged as `divio/base:<version>-<directory-name>`.
+
+
+Marking an image as EOL
+-----------------------
+
+To mark an image as EOL, just rename its folder by adding the ``EOL-`` prefix.
