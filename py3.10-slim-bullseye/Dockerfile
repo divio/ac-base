@@ -1,4 +1,4 @@
-FROM python:3.10.2-slim-bullseye AS build
+FROM python:3.10.6-slim-bullseye AS build
 
 ARG TARGET=prod
 
