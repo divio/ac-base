@@ -1,4 +1,4 @@
-FROM python:3.9.6-slim-buster AS build
+FROM python:3.9.16-slim-buster AS build
 
 ARG TARGET=prod
 
