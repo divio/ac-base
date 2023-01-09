@@ -69,8 +69,8 @@ RUN if [ "$TARGET" = "dev" ] ; then \
         pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
-COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.10/site-packages/add_addons_dev_to_syspath.py
-RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.10/site-packages/add_addons_dev_to_syspath.pth
+COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.11/site-packages/add_addons_dev_to_syspath.py
+RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.11/site-packages/add_addons_dev_to_syspath.pth
 
 # Cleanup
 RUN apt-get autoremove -y && \
@@ -123,7 +123,7 @@ ENV LC_ALL=C.UTF-8 \
     PIP_REQUIRE_VIRTUALENV=false \
     PROCFILE_PATH=/app/Procfile \
     PYTHONUNBUFFERED=1 \
-    WHEELS_PLATFORM=bullseye-py310
+    WHEELS_PLATFORM=bullseye-py311
 WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/tini", "-g", "--"]
