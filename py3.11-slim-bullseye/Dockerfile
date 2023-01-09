@@ -1,4 +1,4 @@
-FROM python:3.9.16-slim-buster AS build
+FROM python:3.11.1-slim-bullseye AS build
 
 ARG TARGET=prod
 
@@ -17,7 +17,7 @@ RUN apt-get install -y --no-install-recommends \
         curl \
         gettext \
         libcap2-bin \
-        libffi6 \
+        libffi7 \
         libfreetype6 \
         libjpeg62-turbo \
         libopenjp2-7 \
@@ -27,7 +27,7 @@ RUN apt-get install -y --no-install-recommends \
         libxslt1.1 \
         libyaml-0-2 \
         mime-support \
-        postgresql-client-11 \
+        postgresql-client-13 \
         wget \
         zlib1g
 
@@ -69,8 +69,8 @@ RUN if [ "$TARGET" = "dev" ] ; then \
         pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
-COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.py
-RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.pth
+COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.11/site-packages/add_addons_dev_to_syspath.py
+RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.11/site-packages/add_addons_dev_to_syspath.pth
 
 # Cleanup
 RUN apt-get autoremove -y && \
@@ -123,7 +123,7 @@ ENV LC_ALL=C.UTF-8 \
     PIP_REQUIRE_VIRTUALENV=false \
     PROCFILE_PATH=/app/Procfile \
     PYTHONUNBUFFERED=1 \
-    WHEELS_PLATFORM=buster-py39
+    WHEELS_PLATFORM=bullseye-py311
 WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/tini", "-g", "--"]
