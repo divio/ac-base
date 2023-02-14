@@ -1,6 +1,7 @@
 FROM python:3.10.9-slim-bullseye AS build
 
 ARG TARGET=prod
+ARG ARCH=amd64
 
 ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \
@@ -57,7 +58,8 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
 RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Install tini
-RUN curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini
+RUN ([ "$ARCH" = "arm64" ] && tini="tini-arm64" || tini="tini"); \
+    curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/${tini}
 RUN chmod +x /tini
 
 # Python environment setup
