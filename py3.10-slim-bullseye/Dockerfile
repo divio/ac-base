@@ -58,8 +58,9 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
 RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Install tini
-RUN ([ "$ARCH" = "arm64" ] && tini="tini-arm64" || tini="tini"); \
-    curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/${tini}
+RUN if [ "$ARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-arm64 \
+    ; else curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini \
+    ; fi
 RUN chmod +x /tini
 
 # Python environment setup
