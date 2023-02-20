@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+* Added `ARG ARCH` in Dockerfile.
+
+
 1.4 (2023-01-06)
 ----------------
 
