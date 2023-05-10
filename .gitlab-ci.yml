@@ -9,7 +9,7 @@ variables:
   DOCKER_HOST: tcp://docker:2376/
   #DOCKER_DRIVER: overlay2
   DOCKER_TLS_VERIFY: 1
-  DOCKER_CERT_PATH: /certs
+  DOCKER_TLS_CERTDIR: /certs
   BUILDX_VERSION: v0.10.4
   BUILDX_ARCH: linux-amd64
   PLATFORMS: linux/arm/v7,linux/arm64/v8,linux/amd64
