@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM python:3.6.11-alpine3.12 AS build
 
 ARG TARGET=prod

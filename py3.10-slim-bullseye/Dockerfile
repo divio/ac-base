@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM python:3.10.9-slim-bullseye AS build
 
 ARG TARGET=prod

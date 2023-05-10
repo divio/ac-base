@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM python:3.9.16-slim-buster AS build
 
 ARG TARGET=prod

@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM php:7.3-fpm-stretch AS build
 
 ENV PATH=/root/.local/bin:$PATH \

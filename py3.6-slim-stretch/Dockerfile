@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM python:3.6.11-slim-stretch AS build
 
 ARG TARGET=prod
