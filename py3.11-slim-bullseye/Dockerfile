@@ -1,5 +1,5 @@
-FROM python:3.11.1-slim-bullseye AS build
 # hadolint global ignore=DL3059
+FROM python:3.11.3-slim-bullseye AS build
 
 ARG TARGET=prod
 ARG ARCH=amd64
@@ -19,6 +19,7 @@ RUN apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         gettext \
+        libcairo2 \
         libcap2-bin \
         libffi7 \
         libfreetype6 \
@@ -37,10 +38,12 @@ RUN apt-get install -y --no-install-recommends \
 # hadolint ignore=DL3008
 RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         build-essential \
+        cmake \
         gcc \
         gfortran \
         libatlas-base-dev \
         libopenblas-dev \
+        libcairo2-dev \
         libffi-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -54,6 +57,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         libwebp-dev \
         libxslt-dev \
         libyaml-dev \
+        pkg-config \
         zlib1g-dev \
     ; fi
 
