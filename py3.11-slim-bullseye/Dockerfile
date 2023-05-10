@@ -1,4 +1,5 @@
 FROM python:3.11.1-slim-bullseye AS build
+# hadolint global ignore=DL3059
 
 ARG TARGET=prod
 ARG ARCH=amd64
@@ -13,6 +14,7 @@ RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
 RUN apt-get update && apt-get upgrade -y
 
 # Dependencies
+# hadolint ignore=DL3008
 RUN apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
@@ -32,6 +34,7 @@ RUN apt-get install -y --no-install-recommends \
         wget \
         zlib1g
 
+# hadolint ignore=DL3008
 RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         build-essential \
         gcc \
@@ -64,11 +67,13 @@ RUN if [ "$ARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini http
 RUN chmod +x /tini
 
 # Python environment setup
+# hadolint ignore=DL3013
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir pip-reqs==0.11.0
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013
 RUN if [ "$TARGET" = "dev" ] ; then \
         pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
