@@ -37,9 +37,10 @@ build-dev:
   before_script:
     - wget -O /usr/bin/docker-buildx ${BUILDX_URL}
     - chmod +x /usr/bin/docker-buildx
-    - docker-buildx create --use
-    - docker-buildx version
+    - ls -al /certs/client
     - docker info
+    - docker-buildx version
+    - docker-buildx create --use
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
     - >
@@ -63,8 +64,8 @@ build-prod:
   before_script:
     - wget -O /usr/bin/docker-buildx ${BUILDX_URL}
     - chmod +x /usr/bin/docker-buildx
-    - docker-buildx create --use
     - docker-buildx version
+    - docker-buildx create --use
     - docker info
     - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
