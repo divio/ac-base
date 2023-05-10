@@ -1,6 +1,6 @@
-#! /usr/bin/env python
-# This script uses python 2.7.6 and only the standardlib because that is what
-# is available on in the context of the build hook on docker cloud / dockerhub.
+#! /usr/bin/env python3
+# This script uses only the standardlib because that is what
+# is available on in the context of the CI/CD platform.
 import os
 import argparse
 
