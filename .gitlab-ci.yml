@@ -77,6 +77,8 @@ test-dev:
       --target=dev
       --tag ${CI_COMMIT_TAG}
       test
+  only:
+    - tags
   #except:
   #  - branches
 
