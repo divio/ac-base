@@ -1,7 +1,9 @@
+image: docker:stable
+
 include:
   - project: divio/infra/gitlab-pipelines
     ref: master
-    file: blank/.gitlab-ci.yml
+    file: base/.gitlab-ci.yml
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
