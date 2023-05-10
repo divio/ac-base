@@ -7,6 +7,7 @@ ENV PATH=/root/.local/bin:$PATH
 RUN apk update && apk upgrade
 
 # Dependencies
+# hadolint ignore=DL3018
 RUN apk add \
         curl \
         freetype \
@@ -29,6 +30,7 @@ RUN apk add \
         tini \
         yaml
 
+# hadolint ignore=DL3018
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
         blas-dev \
         freetype-dev \
@@ -64,6 +66,7 @@ RUN pip install --no-cache-dir pip-reqs==0.9.0
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013,DL3042,DL4006
 RUN if [ "$TARGET" = "dev" ] ; then \
         curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
         /root/.local/venvs/pipsi/bin/pip --no-cache-dir install virtualenv && \

@@ -21,7 +21,7 @@ linting:
       -type f
       -name Dockerfile
       -not -path './EOL-*'
-      -print0 | xargs -0 -n1 -I %
+      -print0 | xargs -0 -I %
       sh -c 'LINT_FILE_DOCKER=% /bin/lint --check --run=docker'
 
 build-dev:

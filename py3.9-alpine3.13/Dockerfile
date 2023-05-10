@@ -6,6 +6,7 @@ ENV PATH=/root/.local/bin:$PATH
 RUN apk update && apk upgrade
 
 # Dependencies
+# hadolint ignore=DL3018
 RUN apk add \
         curl \
         freetype \
@@ -28,6 +29,7 @@ RUN apk add \
         tini \
         yaml
 
+# hadolint ignore=DL3018
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
         blas-dev \
         cargo \
@@ -64,6 +66,7 @@ RUN pip install --no-cache-dir pip-reqs==0.10.0
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013
 RUN if [ "$TARGET" = "dev" ] ; then \
         pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi

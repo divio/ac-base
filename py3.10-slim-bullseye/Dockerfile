@@ -14,6 +14,7 @@ RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
 RUN apt-get update && apt-get upgrade -y
 
 # Dependencies
+# hadolint ignore=DL3008
 RUN apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
@@ -33,6 +34,7 @@ RUN apt-get install -y --no-install-recommends \
         wget \
         zlib1g
 
+# hadolint ignore=DL3008
 RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         build-essential \
         gcc \
@@ -69,6 +71,7 @@ RUN pip install --no-cache-dir pip-reqs==0.10.0
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013
 RUN if [ "$TARGET" = "dev" ] ; then \
         pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi

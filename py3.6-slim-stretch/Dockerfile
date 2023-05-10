@@ -15,6 +15,7 @@ RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
 RUN apt-get update && apt-get upgrade -y
 
 # Dependencies
+# hadolint ignore=DL3008
 RUN apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
@@ -33,6 +34,7 @@ RUN apt-get install -y --no-install-recommends \
         wget \
         zlib1g
 
+# hadolint ignore=DL3008
 RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         build-essential \
         gcc \
@@ -63,10 +65,10 @@ RUN pip install --no-cache-dir pip-reqs==0.8.6
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013,DL3042,DL4006
 RUN if [ "$TARGET" = "dev" ] ; then \
-        wget https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py && \
-        python get-pipsi.py --no-modify-path && \
-        rm get-pipsi.py && \
+        curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
+        /root/.local/venvs/pipsi/bin/pip --no-cache-dir install virtualenv && \
         ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
         pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
    ; fi
@@ -89,6 +91,7 @@ RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.6/site-packa
 #   ENV NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules \
 #       PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN mkdir -p $NVM_DIR
+# hadolint ignore=DL4006
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash
 
 # Cleanup
