@@ -10,6 +10,7 @@ variables:
   #DOCKER_DRIVER: overlay2
   DOCKER_TLS_VERIFY: 1
   DOCKER_TLS_CERTDIR: /certs
+  DOCKER_CERT_PATH: /certs/client
   BUILDX_VERSION: v0.10.4
   BUILDX_ARCH: linux-amd64
   PLATFORMS: linux/arm/v7,linux/arm64/v8,linux/amd64
@@ -38,7 +39,7 @@ build-dev:
   before_script:
     - wget -O /usr/bin/docker-buildx ${BUILDX_URL}
     - chmod +x /usr/bin/docker-buildx
-    - ls -al /certs/client
+    - ls -al /certs /certs/client
     - docker info
     - docker-buildx version
     - docker-buildx create --use
