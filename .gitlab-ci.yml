@@ -8,7 +8,7 @@ include:
 variables:
   BUILDX_VERSION: v0.10.4
   BUILDX_ARCH: linux-amd64
-  PLATFORMS: linux/arm/v7,linux/arm64/v8,linux/amd64
+  PLATFORMS: linux/arm64/v8,linux/amd64
   PUBLIC_REPOSITORY: divio/base
   BUILDX_URL: https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.${BUILDX_ARCH}
 
