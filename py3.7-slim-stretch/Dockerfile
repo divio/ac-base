@@ -58,13 +58,13 @@ RUN curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/rele
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install pip-reqs==0.8.6
-RUN pip install start==0.2
+RUN pip install --no-cache-dir pip-reqs==0.8.6
+RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
         curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python && \
-        /root/.local/venvs/pipsi/bin/pip install virtualenv && \
+        /root/.local/venvs/pipsi/bin/pip --no-cache-dir install virtualenv && \
         ln -s /root/.local/venvs/pipsi/bin/virtualenv /root/.local/bin/virtualenv && \
         pipsi install 'https://github.com/aldryncore/pip-tools/archive/1.9.0.2.tar.gz#egg=pip-tools==1.9.0.2' \
    ; fi

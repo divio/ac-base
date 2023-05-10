@@ -58,8 +58,8 @@ RUN curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/rele
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install pip-reqs==0.8.6
-RUN pip install start==0.2
+RUN pip install --no-cache-dir pip-reqs==0.8.6
+RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \

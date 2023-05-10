@@ -64,12 +64,12 @@ RUN if [ "$ARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini http
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install pip-reqs==0.10.0
-RUN pip install start==0.2
+RUN pip install --no-cache-dir pip-reqs==0.10.0
+RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
 RUN if [ "$TARGET" = "dev" ] ; then \
-        pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
+        pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.10/site-packages/add_addons_dev_to_syspath.py
