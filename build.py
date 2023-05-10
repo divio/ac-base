@@ -84,7 +84,6 @@ def get_test_command(repo, tag, target):
         "WHEELSPROXY_URL=https://wheels.aldryn.net/v1/pypi/buster-py39/",
         "-e",
         "NPY_NUM_BUILD_JOBS={}".format(os.cpu_count()),
-        "-it",
         get_image_name(repo, tag, target),
         "sh",
         "-c",
