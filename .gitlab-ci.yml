@@ -8,7 +8,7 @@ include:
 variables:
   DOCKER_HOST: tcp://docker:2376/
   #DOCKER_DRIVER: overlay2
-  DOCKER_TLS_VERIFY: 0
+  DOCKER_TLS_VERIFY: 1
   #DOCKER_TLS_CERTDIR: /certs
   DOCKER_CERT_PATH: /certs/client
   BUILDX_VERSION: v0.10.4
