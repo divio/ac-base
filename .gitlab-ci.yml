@@ -12,6 +12,17 @@ variables:
   PUBLIC_REPOSITORY: divio/base
   BUILDX_URL: https://github.com/docker/buildx/releases/download/${BUILDX_VERSION}/buildx-${BUILDX_VERSION}.${BUILDX_ARCH}
 
+linting:
+  image: divio/lint
+  stage: qa
+  needs: []
+  script:
+    - find .
+      -type f
+      -name Dockerfile
+      -not -path './EOL-\*'
+      -exec sh -c 'LINT_FILE_DOCKER={} /bin/lint --check --run docker' \;
+
 build-dev:
   stage: build
   needs: []
