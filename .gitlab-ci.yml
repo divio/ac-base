@@ -49,8 +49,6 @@ build-dev:
       ${CI_COMMIT_TAG#*-}
   only:
     - tags
-  #except:
-  #  - branches
 
 build-prod:
   stage: build
@@ -75,8 +73,6 @@ build-prod:
       ${CI_COMMIT_TAG#*-}
   only:
     - tags
-  #except:
-  #  - branches
 
 test-dev:
   stage: test
@@ -94,8 +90,6 @@ test-dev:
       test
   only:
     - tags
-  #except:
-  #  - branches
 
 push:
   stage: release
@@ -127,5 +121,3 @@ push:
       docker://${PUBLIC_REPOSITORY}:${CI_COMMIT_TAG}
   only:
     - tags
-  #except:
-  #  - branches
