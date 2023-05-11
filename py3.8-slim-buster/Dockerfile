@@ -1,6 +1,8 @@
-FROM python:3.8.11-slim-buster AS build
+# hadolint global ignore=DL3059
+FROM python:3.8.16-slim-buster AS build
 
 ARG TARGET=prod
+ARG TARGETARCH=amd64
 
 ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \
@@ -12,10 +14,12 @@ RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
 RUN apt-get update && apt-get upgrade -y
 
 # Dependencies
+# hadolint ignore=DL3008
 RUN apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
         gettext \
+        libcairo2 \
         libcap2-bin \
         libffi6 \
         libfreetype6 \
@@ -31,12 +35,18 @@ RUN apt-get install -y --no-install-recommends \
         wget \
         zlib1g
 
+# hadolint ignore=DL3008
 RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
+        autoconf \
+        automake \
+        autotools-dev \
         build-essential \
+        cmake \
         gcc \
         gfortran \
         libatlas-base-dev \
         libopenblas-dev \
+        libcairo2-dev \
         libffi-dev \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
@@ -50,6 +60,8 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         libwebp-dev \
         libxslt-dev \
         libyaml-dev \
+        ninja-build \
+        pkg-config \
         zlib1g-dev \
     ; fi
 
@@ -57,16 +69,20 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
 RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Install tini
-RUN curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini
+RUN if [ "$TARGETARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-arm64 \
+    ; else curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini \
+    ; fi
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install pip-reqs==0.10.0
-RUN pip install start==0.2
+RUN pip install --no-cache-dir pip==23.1.2
+RUN pip install --no-cache-dir pip-reqs==0.11.0
+RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013
 RUN if [ "$TARGET" = "dev" ] ; then \
-        pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
+        pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.8/site-packages/add_addons_dev_to_syspath.py

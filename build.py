@@ -1,6 +1,6 @@
-#! /usr/bin/env python
-# This script uses python 2.7.6 and only the standardlib because that is what
-# is available on in the context of the build hook on docker cloud / dockerhub.
+#! /usr/bin/env python3
+# This script uses only the standardlib because that is what
+# is available on in the context of the CI/CD platform.
 import os
 import argparse
 
@@ -38,8 +38,8 @@ def get_build_command(repo, tag, target, arch):
         "--build-arg",
         "TARGET={}".format(target),
         "--build-arg",
-        "ARCH={}".format(arch),
         "--no-cache",
+        "TARGETARCH={}".format(arch),
         get_context_path_from_tag(tag=tag),
     ]
 
@@ -74,17 +74,28 @@ def get_test_command(repo, tag, target):
         "pillow",
         "lxml",
         "pyyaml",
+        "easy_thumbnails[svg]",
     ]
-    pip_command = "pip install --no-binary :all: {}".format(" ".join(packages))
+    accept_wheels = [
+        "importlib-metadata",
+        "zipp",
+        "freetype-py",
+    ]
+    pip_command = "pip install --no-binary :all: --only-binary {} {}".format(
+        ",".join(accept_wheels),
+        " ".join(packages),
+    )
     return [
         "docker",
         "run",
-        "-v" "{}/.artifacts/test:/app:rw".format(os.path.abspath(os.path.dirname(__file__))),
+        "-v"
+        "{}/.artifacts/test:/app:rw".format(
+            os.path.abspath(os.path.dirname(__file__))
+        ),
         "-e",
         "WHEELSPROXY_URL=https://wheels.aldryn.net/v1/pypi/buster-py39/",
         "-e",
         "NPY_NUM_BUILD_JOBS={}".format(os.cpu_count()),
-        "-it",
         get_image_name(repo, tag, target),
         "sh",
         "-c",
@@ -145,7 +156,9 @@ def main():
         exit(code=1)
 
     if operation == "build":
-        command = get_build_command(repo=repo, tag=tag, target=target, arch=arch)
+        command = get_build_command(
+            repo=repo, tag=tag, target=target, arch=arch
+        )
     elif operation == "test":
         command = get_test_command(repo=repo, tag=tag, target=target)
 

@@ -40,9 +40,9 @@ if [ "$TARGET" = "dev" ] ; then cat ${BASEDIR}/packages.dev.txt | sed '/^#/ d' |
 # MISC
 #
 
-pip install pip-reqs==0.8.0
-pip install start==0.2
-pip install virtualenv
+pip install --no-cache-dir pip-reqs==0.8.0
+pip install --no-cache-dir start==0.2
+pip install --no-cache-dir virtualenv
 
 # TODO: Avoid the need for pip-tools
 if [ "$TARGET" = "dev" ] ; then \

@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM php:7.2-fpm-stretch AS build
 
 ENV PATH=/root/.local/bin:$PATH \
@@ -51,6 +52,7 @@ ENV EXTENSIONS=" \
     zip \
     "
 
+# hadolint ignore=DL3002
 USER root
 
 RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
@@ -58,6 +60,7 @@ RUN echo "Acquire::http {No-Cache=True;};" > /etc/apt/apt.conf.d/no-cache
 
 RUN dpkg-reconfigure -f noninteractive tzdata
 
+# hadolint ignore=DL3008,SC2046
 RUN apt-get update && apt-get upgrade -y \
   && apt-get install -yqq apt-transport-https apt-utils build-essential curl dumb-init gnupg2 libc-client-dev nginx openssh-client unzip zlib1g-dev --no-install-recommends \
   && apt-get -yqq install $BUILD_DEPENDENCIES --no-install-recommends \
@@ -101,9 +104,11 @@ RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 #   ENV NODE_PATH=$NVM_DIR/versions/node/v$NODE_VERSION/lib/node_modules \
 #       PATH=$NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 RUN mkdir -p $NVM_DIR
+# hadolint ignore=DL4006
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v$NVM_VERSION/install.sh | bash
 
 # Install yarn in addition
+# hadolint ignore=DL3008,DL4006
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
     && apt-get update \
@@ -135,6 +140,7 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/man /usr/share/doc 
 # Copy composer binaries from official image
 WORKDIR /composer
 
+# hadolint ignore=DL3022
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer
 
 RUN mkdir -p /var/www/html \

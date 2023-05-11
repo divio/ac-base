@@ -1,4 +1,4 @@
-FROM python:3.9.6-alpine3.13 AS build
+FROM python:3.9.9-alpine3.13 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -6,6 +6,7 @@ ENV PATH=/root/.local/bin:$PATH
 RUN apk update && apk upgrade
 
 # Dependencies
+# hadolint ignore=DL3018
 RUN apk add \
         curl \
         freetype \
@@ -28,9 +29,14 @@ RUN apk add \
         tini \
         yaml
 
+# hadolint ignore=DL3018
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
+        autoconf \
+        automake \
         blas-dev \
+        cairo-dev \
         cargo \
+        cmake \
         freetype-dev \
         g++ \
         gcc \
@@ -49,8 +55,10 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         linux-headers \
         make \
         musl-dev \
+        ninja-build \
         openjpeg-dev \
         pcre-dev \
+        pkgconf \
         postgresql-dev \
         proj-dev \
         readline-dev \
@@ -60,12 +68,14 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
     ; fi
 
 # Python environment setup
-RUN pip install pip-reqs==0.10.0
-RUN pip install start==0.2
+RUN pip install --no-cache-dir pip==23.1.2
+RUN pip install --no-cache-dir pip-reqs==0.11.0
+RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
+# hadolint ignore=DL3013
 RUN if [ "$TARGET" = "dev" ] ; then \
-        pip install pip-tools flit flit-core setuptools-scm poetry auditwheel \
+        pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
    ; fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.py
