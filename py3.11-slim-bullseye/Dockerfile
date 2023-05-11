@@ -37,6 +37,9 @@ RUN apt-get install -y --no-install-recommends \
 
 # hadolint ignore=DL3008
 RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
+        autoconf \
+        automake \
+        autotools-dev \
         build-essential \
         cmake \
         gcc \
@@ -57,6 +60,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         libwebp-dev \
         libxslt-dev \
         libyaml-dev \
+        ninja-build \
         pkg-config \
         zlib1g-dev \
     ; fi
