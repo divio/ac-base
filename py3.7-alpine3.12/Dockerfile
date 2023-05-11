@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3059
-FROM python:3.7.8-alpine3.12 AS build
+FROM python:3.7.10-alpine3.12 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -9,6 +9,7 @@ RUN apk update && apk upgrade
 # Dependencies
 # hadolint ignore=DL3018
 RUN apk add \
+        cairo \
         curl \
         freetype \
         gdal \
@@ -32,7 +33,12 @@ RUN apk add \
 
 # hadolint ignore=DL3018
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
+        autoconf \
+        automake \
         blas-dev \
+        cairo-dev \
+        cargo \
+        cmake \
         freetype-dev \
         g++ \
         gcc \
@@ -51,8 +57,10 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         linux-headers \
         make \
         musl-dev \
+        ninja-build \
         openjpeg-dev \
         pcre-dev \
+        pkgconf \
         postgresql-dev \
         proj-dev \
         readline-dev \
@@ -62,7 +70,8 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
     ; fi
 
 # Python environment setup
-RUN pip install --no-cache-dir pip-reqs==0.8.6
+RUN pip install --no-cache-dir pip==23.1.2
+RUN pip install --no-cache-dir pip-reqs==0.11.0
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools
@@ -88,9 +97,7 @@ RUN mkdir -p /app
 # legacy builder: https://github.com/moby/moby/issues/34645
 
 # Initially belonging to group shadow
-RUN chgrp root \
-    /etc/shadow \
-    /etc/shadow.apk-new
+RUN chgrp root /etc/shadow
 
 
 FROM scratch

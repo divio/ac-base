@@ -1,4 +1,4 @@
-FROM python:3.9.6-alpine3.13 AS build
+FROM python:3.9.9-alpine3.13 AS build
 
 ARG TARGET=prod
 ENV PATH=/root/.local/bin:$PATH
@@ -31,8 +31,12 @@ RUN apk add \
 
 # hadolint ignore=DL3018
 RUN if [ "$TARGET" = "dev" ] ; then apk add \
+        autoconf \
+        automake \
         blas-dev \
+        cairo-dev \
         cargo \
+        cmake \
         freetype-dev \
         g++ \
         gcc \
@@ -51,8 +55,10 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         linux-headers \
         make \
         musl-dev \
+        ninja-build \
         openjpeg-dev \
         pcre-dev \
+        pkgconf \
         postgresql-dev \
         proj-dev \
         readline-dev \
@@ -62,7 +68,8 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
     ; fi
 
 # Python environment setup
-RUN pip install --no-cache-dir pip-reqs==0.10.0
+RUN pip install --no-cache-dir pip==23.1.2
+RUN pip install --no-cache-dir pip-reqs==0.11.0
 RUN pip install --no-cache-dir start==0.2
 
 # TODO: Avoid the need for pip-tools

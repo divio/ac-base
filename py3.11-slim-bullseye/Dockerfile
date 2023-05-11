@@ -2,7 +2,7 @@
 FROM python:3.11.3-slim-bullseye AS build
 
 ARG TARGET=prod
-ARG ARCH=amd64
+ARG TARGETARCH=amd64
 
 ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \
@@ -69,14 +69,13 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
 RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Install tini
-RUN if [ "$ARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-arm64 \
+RUN if [ "$TARGETARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-arm64 \
     ; else curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini \
     ; fi
 RUN chmod +x /tini
 
 # Python environment setup
-# hadolint ignore=DL3013
-RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir pip==23.1.2
 RUN pip install --no-cache-dir pip-reqs==0.11.0
 RUN pip install --no-cache-dir start==0.2
 
