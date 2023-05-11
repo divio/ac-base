@@ -38,8 +38,8 @@ def get_build_command(repo, tag, target, arch):
         "--build-arg",
         "TARGET={}".format(target),
         "--build-arg",
-        "ARCH={}".format(arch),
         "--no-cache",
+        "TARGETARCH={}".format(arch),
         get_context_path_from_tag(tag=tag),
     ]
 
@@ -74,12 +74,24 @@ def get_test_command(repo, tag, target):
         "pillow",
         "lxml",
         "pyyaml",
+        "easy_thumbnails[svg]",
     ]
-    pip_command = "pip install --no-binary :all: {}".format(" ".join(packages))
+    accept_wheels = [
+        "importlib-metadata",
+        "zipp",
+        "freetype-py",
+    ]
+    pip_command = "pip install --no-binary :all: --only-binary {} {}".format(
+        ",".join(accept_wheels),
+        " ".join(packages),
+    )
     return [
         "docker",
         "run",
-        "-v" "{}/.artifacts/test:/app:rw".format(os.path.abspath(os.path.dirname(__file__))),
+        "-v"
+        "{}/.artifacts/test:/app:rw".format(
+            os.path.abspath(os.path.dirname(__file__))
+        ),
         "-e",
         "WHEELSPROXY_URL=https://wheels.aldryn.net/v1/pypi/buster-py39/",
         "-e",
@@ -144,7 +156,9 @@ def main():
         exit(code=1)
 
     if operation == "build":
-        command = get_build_command(repo=repo, tag=tag, target=target, arch=arch)
+        command = get_build_command(
+            repo=repo, tag=tag, target=target, arch=arch
+        )
     elif operation == "test":
         command = get_test_command(repo=repo, tag=tag, target=target)
 
