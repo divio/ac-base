@@ -8,6 +8,7 @@ RUN apk update && apk upgrade
 # Dependencies
 # hadolint ignore=DL3018
 RUN apk add \
+        blas \
         curl \
         freetype \
         gdal \
@@ -20,6 +21,7 @@ RUN apk add \
         libxml2 \
         libxslt \
         mailcap \
+        openblas \
         openjpeg \
         pcre \
         postgresql-client \
@@ -55,7 +57,7 @@ RUN if [ "$TARGET" = "dev" ] ; then apk add \
         linux-headers \
         make \
         musl-dev \
-        ninja-build \
+        openblas-dev \
         openjpeg-dev \
         pcre-dev \
         pkgconf \
