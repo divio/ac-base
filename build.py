@@ -38,8 +38,8 @@ def get_build_command(repo, tag, target, arch):
         "--build-arg",
         "TARGET={}".format(target),
         "--build-arg",
-        "--no-cache",
         "TARGETARCH={}".format(arch),
+        "--no-cache",
         get_context_path_from_tag(tag=tag),
     ]
 
