@@ -2,7 +2,7 @@
 FROM python:3.9.16-slim-buster AS build
 
 ARG TARGET=prod
-ARG TARGETARCH=amd64
+ARG TARGETARCH
 
 ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \

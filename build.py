@@ -29,7 +29,7 @@ def get_context_path_from_tag(tag):
     return directory
 
 
-def get_build_command(repo, tag, target, arch):
+def get_build_command(repo, tag, target):
     return [
         "docker",
         "build",
@@ -37,8 +37,6 @@ def get_build_command(repo, tag, target, arch):
         get_image_name(repo, tag, target),
         "--build-arg",
         "TARGET={}".format(target),
-        "--build-arg",
-        "TARGETARCH={}".format(arch),
         "--no-cache",
         get_context_path_from_tag(tag=tag),
     ]
@@ -124,11 +122,6 @@ def main():
         default=os.environ.get("TARGET", "prod"),
         help="The build target (dev or prod).",
     )
-    parser.add_argument(
-        "--arch",
-        default=os.environ.get("ARCH", "amd64"),
-        help="The build architecture (amd64, arm64, x86_64 etc).",
-    )
 
     args = parser.parse_args()
 
@@ -144,7 +137,6 @@ def main():
         repo = str(args.repo)
         tag = str(args.tag)
         target = str(args.target)
-        arch = str(args.arch)
     if not (repo and tag and target):
         print("Missing parameters!")
         exit(code=1)
@@ -157,7 +149,7 @@ def main():
 
     if operation == "build":
         command = get_build_command(
-            repo=repo, tag=tag, target=target, arch=arch
+            repo=repo, tag=tag, target=target
         )
     elif operation == "test":
         command = get_test_command(repo=repo, tag=tag, target=target)
@@ -165,7 +157,6 @@ def main():
     print("repo: {}".format(repo))
     print("tag: {}".format(tag))
     print("target: {}".format(target))
-    print("arch: {}".format(arch))
     print("command:")
     print(" ".join(command))
     os.execvp(command[0], command)
