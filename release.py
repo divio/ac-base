@@ -1,11 +1,11 @@
-#! /usr/bin/env python2
-# This script uses python 2.7.6 and only the standardlib because that is what
-# is available on in the context of the build hook on docker cloud / dockerhub.
+#! /usr/bin/env python
+# This script uses only the standardlib because that is what
+# is available on in the context of the CI/CD pipeline.
 import os
 import sys
 import argparse
 import subprocess
-from distutils.version import StrictVersion
+from packaging.version import Version, parse
 
 
 def get_tags(suffix=None):
@@ -17,7 +17,7 @@ def get_tags(suffix=None):
 
 
 def extract_versions(tags):
-    return sorted(StrictVersion(t.split("-", 1)[0]) for t in tags)
+    return sorted(parse(t.split("-", 1)[0]) for t in tags)
 
 
 def versions(args):
@@ -41,16 +41,16 @@ def versions(args):
             print(flavor)
             if versions:
                 version = versions[-1]
-                major, minor, patch = version.version
+                major, minor, patch = version.major, version.minor, version.micro
                 patch = 0
                 if args.next == "minor":
                     minor += 1
                 elif args.next == "major":
                     major += 1
                     minor = 0
-                version.version = major, minor, patch
+                version = Version(f"{major}.{minor}")
             else:
-                version = StrictVersion("1.0")
+                version = Version("1.0")
             if args.tag:
                 tag = "{}-{}".format(version, flavor)
                 print(

@@ -11,9 +11,10 @@ To locally build an image, run the following command::
 
    ./build.py --repo divio/base --tag 0.00-py3.6-alpine3.7 build
 
-To build for a specific architecture (eg. ARM64), add `--arch` flag::
+To build for a different architecture than your machine's one, set the
+`DOCKER_DEFAULT_PLATFORM` environment variable::
 
-   ./build.py --repo divio/base --arch arm64 --tag 1.1-py3.11-slim-bullseye build
+   DOCKER_DEFAULT_PLATFORM=linux/arm64 ./build.py --repo divio/base --tag 1.1-py3.11-slim-bullseye build
 
 Check `./build.py --help` for additional information.
 

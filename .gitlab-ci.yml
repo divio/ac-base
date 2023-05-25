@@ -25,23 +25,20 @@ linting:
       -print0 | xargs -0 -I %
       sh -c 'LINT_FILE_DOCKER=% /bin/lint --check --run=docker'
 
-build-dev:
+.build:
   stage: build
   needs: []
-  variables:
-    TARGET: dev
-    IMAGE_NAME: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}-dev
   before_script:
-    - wget -O /usr/bin/docker-buildx ${BUILDX_URL}
-    - chmod +x /usr/bin/docker-buildx
-    - ls -al /certs /certs/client
-    - docker info
-    - docker-buildx version
-    - docker-buildx create --use
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+    - >
+      mkdir -p /usr/libexec/docker/cli-plugins
+      wget -q -O /usr/libexec/docker/cli-plugins/docker-buildx ${BUILDX_URL}
+      chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
+      docker buildx version
+      docker buildx create --use
+      docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
     - >
-      docker-buildx build
+      docker buildx build
       --platform ${PLATFORMS}
       --build-arg TARGET=${TARGET}
       --tag ${IMAGE_NAME}
@@ -50,29 +47,17 @@ build-dev:
   only:
     - tags
 
+build-dev:
+  extends: .build
+  variables:
+    TARGET: dev
+    IMAGE_NAME: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}-dev
+
 build-prod:
-  stage: build
-  needs: []
+  extends: .build
   variables:
     TARGET: prod
     IMAGE_NAME: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
-  before_script:
-    - wget -O /usr/bin/docker-buildx ${BUILDX_URL}
-    - chmod +x /usr/bin/docker-buildx
-    - docker-buildx version
-    - docker-buildx create --use
-    - docker info
-    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-  script:
-    - >
-      docker-buildx build
-      --platform ${PLATFORMS}
-      --build-arg TARGET=${TARGET}
-      --tag ${IMAGE_NAME}
-      --push
-      ${CI_COMMIT_TAG#*-}
-  only:
-    - tags
 
 test-dev:
   stage: test
@@ -108,6 +93,7 @@ push:
     - >
       /skopeo
       copy
+      --multi-arch all
       --src-creds=${SRC_REGISTRY_CREDS}
       --dest-creds=${DST_REGISTRY_CREDS}
       docker://${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}-dev
@@ -115,6 +101,7 @@ push:
     - >
       /skopeo
       copy
+      --multi-arch all
       --src-creds=${SRC_REGISTRY_CREDS}
       --dest-creds=${DST_REGISTRY_CREDS}
       docker://${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}
