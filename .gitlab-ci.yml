@@ -29,13 +29,12 @@ linting:
   stage: build
   needs: []
   before_script:
-    - >
-      mkdir -p /usr/libexec/docker/cli-plugins
-      wget -q -O /usr/libexec/docker/cli-plugins/docker-buildx ${BUILDX_URL}
-      chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
-      docker buildx version
-      docker buildx create --use
-      docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+    - mkdir -p /usr/libexec/docker/cli-plugins
+    - wget -q -O /usr/libexec/docker/cli-plugins/docker-buildx ${BUILDX_URL}
+    - chmod +x /usr/libexec/docker/cli-plugins/docker-buildx
+    - docker buildx version
+    - docker buildx create --use
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
   script:
     - >
       docker buildx build
