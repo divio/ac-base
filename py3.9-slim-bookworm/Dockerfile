@@ -3,6 +3,10 @@ FROM python:3.9.17-slim-bookworm AS build
 
 ARG TARGET=prod
 ARG TARGETARCH
+ARG TINI_VERSION=0.19.0
+ARG PIP_VERSION=23.1.2
+ARG PIPREQS_VERSION=0.11.0
+ARG START_VERSION=0.2
 
 ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \
@@ -69,21 +73,23 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
 RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Install tini
-RUN if [ "$TARGETARCH" = "arm64" ] ; then curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini-arm64 \
-    ; else curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v0.18.0/tini \
-    ; fi
+RUN if [ "$TARGETARCH" = "arm64" ] ; then \
+        curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini-arm64 ; \
+    else \
+        curl -L --show-error --retry 5 -o /tini https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini ; \
+    fi
 RUN chmod +x /tini
 
 # Python environment setup
-RUN pip install --no-cache-dir pip==23.1.2
-RUN pip install --no-cache-dir pip-reqs==0.11.0
-RUN pip install --no-cache-dir start==0.2
+RUN pip install --no-cache-dir pip==${PIP_VERSION}
+RUN pip install --no-cache-dir pip-reqs==${PIPREQS_VERSION}
+RUN pip install --no-cache-dir start==${START_VERSION}
 
 # TODO: Avoid the need for pip-tools
 # hadolint ignore=DL3013
 RUN if [ "$TARGET" = "dev" ] ; then \
-        pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel \
-   ; fi
+        pip install --no-cache-dir pip-tools flit flit-core setuptools-scm poetry auditwheel ; \
+    fi
 
 COPY add_addons_dev_to_syspath.py /usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.py
 RUN echo 'import add_addons_dev_to_syspath' >/usr/local/lib/python3.9/site-packages/add_addons_dev_to_syspath.pth
