@@ -105,7 +105,7 @@ COPY --from=build / /
 
 # Execution environment setup
 RUN addgroup -S app && adduser -D -G app -u 1000 app
-ENV WHEELS_PLATFORM=alpine313-py39 \
+ENV WHEELS_PLATFORM=alpine318-py311 \
     PROCFILE_PATH=/app/Procfile \
     PATH=/root/.local/bin:$PATH
 WORKDIR /app
