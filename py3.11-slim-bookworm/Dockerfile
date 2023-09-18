@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3059
-FROM python:3.11.4-slim-bookworm AS build
+FROM python:3.11.5-slim-bookworm AS build
 
 ARG TARGET=prod
 ARG TARGETARCH
