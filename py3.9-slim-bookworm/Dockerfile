@@ -138,7 +138,7 @@ ENV LC_ALL=C.UTF-8 \
     PIP_REQUIRE_VIRTUALENV=false \
     PROCFILE_PATH=/app/Procfile \
     PYTHONUNBUFFERED=1 \
-    WHEELS_PLATFORM=buster-py39
+    WHEELS_PLATFORM=bookworm-py39
 WORKDIR /app
 EXPOSE 80/tcp 443/tcp
 ENTRYPOINT ["/tini", "-g", "--"]
