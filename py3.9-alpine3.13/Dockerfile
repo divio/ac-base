@@ -1,3 +1,4 @@
+# hadolint global ignore=DL3059
 FROM python:3.9.9-alpine3.13 AS build
 
 ARG TARGET=prod
@@ -7,7 +8,7 @@ RUN apk update && apk upgrade
 
 # Dependencies
 # hadolint ignore=DL3018
-RUN apk add \
+RUN apk add --no-cache \
         blas \
         curl \
         freetype \
@@ -32,7 +33,7 @@ RUN apk add \
         yaml
 
 # hadolint ignore=DL3018
-RUN if [ "$TARGET" = "dev" ] ; then apk add \
+RUN if [ "$TARGET" = "dev" ] ; then apk add --no-cache \
         autoconf \
         automake \
         blas-dev \
