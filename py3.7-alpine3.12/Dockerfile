@@ -8,7 +8,7 @@ RUN apk update && apk upgrade
 
 # Dependencies
 # hadolint ignore=DL3018
-RUN apk add \
+RUN apk add --no-cache \
         blas \
         cairo \
         curl \
@@ -34,7 +34,7 @@ RUN apk add \
         yaml
 
 # hadolint ignore=DL3018
-RUN if [ "$TARGET" = "dev" ] ; then apk add \
+RUN if [ "$TARGET" = "dev" ] ; then apk add --no-cache \
         autoconf \
         automake \
         cairo-dev \

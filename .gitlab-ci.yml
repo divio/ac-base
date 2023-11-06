@@ -16,7 +16,6 @@ linting:
   image: divio/lint
   stage: qa
   needs: []
-  allow_failure: true
   script:
     - find .
       -type f
