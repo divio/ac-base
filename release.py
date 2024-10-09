@@ -1,10 +1,11 @@
 #! /usr/bin/env python
-# This script uses only the standardlib because that is what
-# is available on in the context of the CI/CD pipeline.
-import os
-import sys
+# This script uses only the standardlib because to make it portable
+# and usable from any context (e.g. CI/CD)
 import argparse
+import os
 import subprocess
+import sys
+
 from packaging.version import Version, parse
 
 
@@ -26,23 +27,26 @@ def versions(args):
         versions = extract_versions(tags)
 
         if not versions and not os.path.exists(flavor):
-            print("Flavor not found: {}".format(flavor))
+            print(f"Flavor not found: {flavor}")
             sys.exit(-1)
 
         if args.last:
             version = versions[-1]
-            tag = "{}-{}".format(version, flavor)
+            tag = f"{version}-{flavor}"
             print(tag)
             if args.push:
                 remote = args.push
-                print("Pushing tag {} to {}".format(tag, remote))
+                print(f"Pushing tag {tag} to {remote}")
                 subprocess.check_call(["git", "push", remote, tag])
         elif args.next:
-            print(flavor)
             if versions:
                 version = versions[-1]
-                major, minor, patch = version.major, version.minor, version.micro
-                patch = 0
+                major, minor, _patch = (
+                    version.major,
+                    version.minor,
+                    version.micro,
+                )
+                _patch = 0
                 if args.next == "minor":
                     minor += 1
                 elif args.next == "major":
@@ -51,16 +55,13 @@ def versions(args):
                 version = Version(f"{major}.{minor}")
             else:
                 version = Version("1.0")
+
+            tag = f"{version}-{flavor}"
             if args.tag:
-                tag = "{}-{}".format(version, flavor)
-                print(
-                    "Tagging repo with tag {} for version {}".format(
-                        tag, version
-                    )
-                )
+                print(f"{flavor} => created tag for {version}:\n  {tag}")
                 subprocess.check_call(["git", "tag", tag])
             else:
-                print(version)
+                print(tag)
         else:
             print(flavor)
             for version in reversed(versions):
@@ -72,15 +73,45 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     subparsers = parser.add_subparsers()
-    parser_versions = subparsers.add_parser("versions")
-    parser_versions.add_argument("--last", action="store_true")
-    parser_versions.add_argument("--next", nargs="?", const="minor")
-    parser_versions.add_argument("--tag", action="store_true")
-    parser_versions.add_argument("--push")
-    parser_versions.add_argument("flavors", nargs="+")
+    parser_versions = subparsers.add_parser(
+        "versions",
+        help="Manage versions: either print existing ones, or bump and tag the next one",
+    )
+    parser_versions.add_argument(
+        "--last",
+        action="store_true",
+        help="Print the last version(s) without bumping anything",
+    )
+    parser_versions.add_argument(
+        "--next",
+        choices=["major", "minor", "test"],
+        default=None,
+        help="Bump to the next version",
+    )
+    parser_versions.add_argument(
+        "--tag",
+        action="store_true",
+        help="Create the git tags (requires --next)",
+    )
+    parser_versions.add_argument(
+        "--push",
+        help="Push the last tag to the given remote (requires --last), e.g. origin",
+    )
+    parser_versions.add_argument(
+        "flavors", nargs="+", help="Pattern(s) to consider, e.g. py3*"
+    )
     parser_versions.set_defaults(func=versions)
 
     args = parser.parse_args()
+    if (args.last or args.push) and (args.next or args.tag):
+        parser.error("Cannot use --last/--push with --next/--tag")
+
+    if args.tag and not args.next:
+        parser.error("Must use --next with --tag")
+
+    if args.push and not args.last:
+        parser.error("Must use --last with --push")
+
     args.func(args)
 
 
