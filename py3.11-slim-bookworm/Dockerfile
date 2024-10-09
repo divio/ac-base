@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3059
-FROM python:3.11.7-slim-bookworm AS build
+FROM python:3.11.10-slim-bookworm AS build
 
 ARG TARGET=prod
 ARG TARGETARCH
@@ -12,6 +12,8 @@ ENV PYTHONUNBUFFERED=1 \
     PATH=/root/.local/bin:$PATH \
     PROCFILE_PATH=/app/Procfile \
     LC_ALL=C.UTF-8
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN mkdir -p /usr/share/man/man1/ /usr/share/man/man7/
 
@@ -68,6 +70,14 @@ RUN if [ "$TARGET" = "dev" ] ; then apt-get install -y --no-install-recommends \
         pkg-config \
         zlib1g-dev \
     ; fi
+
+# In dev, install Rust as many packages use it behind the scenes
+# (e.g. langchain, AI tools, etc.)
+# hadolint ignore=SC2086
+RUN if [ "$TARGET" = "dev" ] ; then \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; \
+    for i in $HOME/.cargo/bin/*; do ln -s "$i" "/usr/bin/$(basename $i)"; done \
+    fi
 
 # Workaround for a bug in hub.docker.com
 RUN ln -s -f /bin/true /usr/bin/chfn
