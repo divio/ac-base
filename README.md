@@ -57,10 +57,11 @@ Then push the tags to Gitlab to trigger an automatic build:
 git push --tags origin
 ```
 
-You can also push a selected set of tags via the `release.py` script:
+You can also selectively push only the last tags created for given flavors via the `release.py`
+script:
 
 ```bash
-./release.py versions --push=origin --last py*
+./release.py versions --last --push=origin py*
 ```
 
 ## Adding a new base image
