@@ -19,14 +19,16 @@ DOCKER_DEFAULT_PLATFORM=linux/arm64 ./build.py --repo divio/base --tag 1.1-py3.1
 
 Check `./build.py --help` for additional information.
 
-## Test all images
+## Test images
 
-You can build and test all images locally by running:
+You can build and test all, or specified, images locally by running:
 
 ```bash
-ls -d py* | xargs -I '{}' ./build.py --repo divio/base --target=prod --tag test-{} build
-ls -d py* | xargs -I '{}' ./build.py --repo divio/base --target=dev --tag test-{} build
-ls -d py* | xargs --open-tty -I '{}' ./build.py --repo divio/base --target=dev --tag test-{} test
+# test all images
+make test
+
+# only test specific images
+make test IMAGES="py3.12-alpine3.19 py3.11-slim-bookworm"
 ```
 
 ## Release process
