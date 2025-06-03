@@ -1,5 +1,5 @@
 # hadolint global ignore=DL3059
-FROM python:3.11.3-slim-bullseye AS build
+FROM python:3.11.12-slim-bullseye AS build
 
 ARG TARGET=prod
 ARG TARGETARCH
